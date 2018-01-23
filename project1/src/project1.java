@@ -94,8 +94,8 @@ public class project1 extends HttpServlet {
                 }
                 
                 out.println("<tr>" + "<td>" + m_id + "</td>" + "<td>" + m_title + "</td>" + "<td>" + m_year + "</td>"
-                         + "<td>" + m_director + "</td>" + "<td>" + m_rating + "</td>" +
-                         "<td>" + m_genres + "</td>" + "<td>" + m_stars + "</td>" +
+                         + "<td>" + m_director + "</td>" + "<td>" + m_genres + "</td>" +
+                         "<td>" + m_stars + "</td>" + "<td>" + m_rating + "</td>" +
                 			"</tr>");
             }
 
