@@ -17,7 +17,7 @@ import com.google.gson.JsonObject;
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/Login")
+@WebServlet("/loginServlet")
 public class loginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,21 +33,9 @@ public class loginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doPost(request,response);
-		
-	}
-	
-	
-	
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
-		String email = request.getParameter("email");
+		String username = request.getParameter("username");
+		System.out.println("printing email");
+		System.out.println(username);
 		String password = request.getParameter("password");
 		
 		String loginUser = "mytestuser";
@@ -59,31 +47,35 @@ public class loginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         //System.out.println("Before try loop");
         try {
-        		//System.out.println("Beginning of try loop");
-            //Class.forName("org.gjt.mm.mysql.Driver");
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            System.out.println("Before Connection");
             Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
             // Declare our statement
             Statement statement = dbcon.createStatement();
             
-            String query = "SELECT * from customers where customers.email = " + "'"+ email+ "'" + " AND customers.password = " + "'"+password+ "'";
-           // System.out.println(query);
+            String query = "SELECT * from customers where customers.email = " + "'"+ username+ "'" + " AND customers.password = " + "'"+password+ "'";
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
             
-           // JsonArray jsonArray = new JsonArray();
-            JsonObject jsonObject = new JsonObject();
             if (rs.next()) {
-            	
-	            String customer_email = rs.getString(6);
-	            String customer_password = rs.getString(7);
-	            jsonObject.addProperty("email", customer_email);
-	            jsonObject.addProperty("password", customer_password);
+            		System.out.println("");
+            		request.getSession().setAttribute("user", new User(username));
+            		JsonObject jsonObject = new JsonObject();
+	            jsonObject.addProperty("status", "success");
+	            jsonObject.addProperty("message", "success");
+    				out.write(jsonObject.toString());
+	           
             }
             
-            out.write(jsonObject.toString());
- 
+            else {
+            		//login fails
+	            	request.getSession().setAttribute("user", new User(username));
+	    			JsonObject responseJsonObject = new JsonObject();
+	    			responseJsonObject.addProperty("status", "fail");
+	    			responseJsonObject.addProperty("message", "email " + username + " doesn't exist");
+	    			responseJsonObject.addProperty("message", "incorrect password");
+	    			out.write(responseJsonObject.toString());
+            }
+            
             rs.close();
             statement.close();
             dbcon.close();
@@ -100,7 +92,15 @@ public class loginServlet extends HttpServlet {
             return;
         }
         out.close();
-		//doGet(request, response);
+		//doPost(request,response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

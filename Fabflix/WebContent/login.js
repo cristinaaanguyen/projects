@@ -1,25 +1,38 @@
-function handleLoginResult(resultData) {
-	console.log("handleResult: Getting login info");
 
-	// populate the star table
-	var LoginElement = jQuery("#login");
-	console.log(resultData);
+function handleLoginResult(resultDataString) {
+	resultDataJson = JSON.parse(resultDataString);
+	
+	console.log("handle login response");
+	console.log(resultDataJson);
+	console.log(resultDataJson["status"]);
+
+	// if login success, redirect to index.html page
+	if (resultDataJson["status"] == "success") {
+		window.location.replace("/Fabflix/index.html");
+	} else {
+		console.log("show error message");
+		console.log(resultDataJson["message"]);
+		jQuery("#login_error_message").text(resultDataJson["message"]);
+	}
+}
+
+
+function submitLoginForm(formSubmitEvent) {
+	console.log("submit login form");
+	
+	// important: disable the default action of submitting the form
+	//   which will cause the page to refresh
+	//   see jQuery reference for details: https://api.jquery.com/submit/
+	formSubmitEvent.preventDefault();
+		
+	jQuery.post(
+		"/Fabflix/loginServlet", 
+		// serialize the login form to the data sent by POST request
+		jQuery("#login_form").serialize(),
+		(resultDataString) => handleLoginResult(resultDataString));
 
 }
 
-// makes the HTTP GET request and registers on success callback function handleStarResult
-function login(username, password){
-	jQuery.ajax({
-		  dataType: "json",
-		  method: "POST",
-		  url: "/Fabflix/loginServlet?username=" + username + "&" + "password=" + password,
-		  success: (resultData) => handleLoginResult(resultData)
-	});
-}
+// bind the submit action of the form to a handler function
+jQuery("#login_form").submit((event) => submitLoginForm(event));
 
-$('#sumbit').on('click', function(event) {
-	  event.preventDefault(); // To prevent following the link (optional)
-	  var username = $('#email').val();
-	  var password = $('#password').val();
-	  login(username, password);
-	});

@@ -1,34 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Required meta tags -->
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
-	
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-
-
-<title>Fabflix Log in</title>
+	<meta charset="UTF-8">
+	<title>Log into Fabflix</title>
 </head>
 <body>
-
-	<form name="loginForm" method="get" action="Login">
-	    Email: <input id = "email" type="text" name="email"/> 
-	    Password: <input id = "password" type="password" name="password"/> 
-	    <input id = "submit" type="submit" value="Login" />
+	<h2>Please Login to Fablix</h2>
+	<!-- Set the method to POST to avoid username/password showing on URL
+		 Disable the default action because our JS function will handle it. -->
+	<form id="login_form" method="post" action="#">
+	    <label><b>Username</b></label>
+	    <input type="text" placeholder="Enter Username" name="username">
+		<br>
+	    <label><b>Password</b></label>
+	    <input type="password" placeholder="Enter Password" name="password">
+		<br>
+	    <input type="submit" value="Login">
 	</form>
-
-	<div id = "login"> 
-		
-	</div>
-	<!-- include jQuery and Bootstrap JS -->
+	
+	<div id="login_error_message"></div>
+	
+	<!-- include jQuery-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<!-- include our own JS file -->
 	<script src="./login.js"></script>
+	
 </body>
 </html>
