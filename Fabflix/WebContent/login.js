@@ -1,18 +1,20 @@
 
 function handleLoginResult(resultDataString) {
-	resultDataJson = JSON.parse(resultDataString);
+	console.log("Beginning of handle result");
+	console.log(resultDataString);
+	//resultDataJson = JSON.parse(resultDataString);
 	
-	console.log("handle login response");
-	console.log(resultDataJson);
-	console.log(resultDataJson["status"]);
+	
+	console.log(resultDataString);
+	console.log(resultDataString["status"]);
 
 	// if login success, redirect to index.html page
-	if (resultDataJson["status"] == "success") {
+	if (resultDataString["status"] == "success") {
 		window.location.replace("/Fabflix/index.html");
 	} else {
 		console.log("show error message");
-		console.log(resultDataJson["message"]);
-		jQuery("#login_error_message").text(resultDataJson["message"]);
+		console.log(resultDataString["message"]);
+		jQuery("#login_error_message").text(resultDataString["message"]);
 	}
 }
 
@@ -23,6 +25,7 @@ function submitLoginForm(formSubmitEvent) {
 	// important: disable the default action of submitting the form
 	//   which will cause the page to refresh
 	//   see jQuery reference for details: https://api.jquery.com/submit/
+	console.log("before jQuery post");
 	formSubmitEvent.preventDefault();
 		
 	jQuery.post(

@@ -1,29 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Log into Fabflix</title>
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+
+    <!-- Optional theme -->
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style type="text/css">
+      body{
+     
+        background-size: cover;
+        color: white;
+        background-repeat: no-repeat;
+        background-position: center; 
+        background-attachment: fixed;
+      }
+      form{
+        background: rgba(45, 45, 125, 0.58);
+        color: white;
+        padding: 40px;
+        margin-top: 200px;
+        padding-bottom: 60px;
+        box-shadow: 10px 10px 5px rgba(6, 1, 1, 0.43)
+      }
+     h1{
+        text-align: center;
+      }
+      .btn{
+        width: 100%;
+        border-radius: 0px;
+        
+      }
+      .form-control{
+        border-radius: 0px;
+        background-color: rgba(23, 3, 3, 0.48);
+        color: white;
+        border-radius:1px solid #291212
+      }
+    </style>
+
+
+<title>Fabflix Log in</title>
 </head>
 <body>
-	<h2>Please Login to Fablix</h2>
-	<!-- Set the method to POST to avoid username/password showing on URL
-		 Disable the default action because our JS function will handle it. -->
-	<form id="login_form" method="post" action="#">
-	    <label><b>Username</b></label>
-	    <input type="text" placeholder="Enter Username" name="username">
-		<br>
-	    <label><b>Password</b></label>
-	    <input type="password" placeholder="Enter Password" name="password">
-		<br>
-	    <input type="submit" value="Login">
-	</form>
-	
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-8">
+            <form id="login_form" method="post" action="#">
+            		<h1>Welcome to Fabflix!</h1>
+              <div class="form-group">
+                <label>Email address</label>
+                <input type="text" class="form-control" name = "username" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name = "password" placeholder="Password">
+              </div>
+              <br>
+             <input type="submit" value="Login" />
+            </form>
+          </div>
+        </div>
+      </div>
+
 	<div id="login_error_message"></div>
+		
 	
-	<!-- include jQuery-->
+	<!-- include jQuery and Bootstrap JS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 	<!-- include our own JS file -->
 	<script src="./login.js"></script>
-	
 </body>
 </html>
