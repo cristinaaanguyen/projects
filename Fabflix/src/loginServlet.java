@@ -62,6 +62,7 @@ public class loginServlet extends HttpServlet {
             		JsonObject jsonObject = new JsonObject();
 	            jsonObject.addProperty("status", "success");
 	            jsonObject.addProperty("message", "success");
+	            System.out.println(jsonObject.toString());
     				out.write(jsonObject.toString());
 	           
             }
