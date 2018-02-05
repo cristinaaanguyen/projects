@@ -1,3 +1,5 @@
+
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -5,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,28 +18,49 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Browse
  */
-@WebServlet("/loginServlet")
-public class loginServlet extends HttpServlet {
+@WebServlet("/Browse")
+public class Browse extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public loginServlet() {
+    public Browse() {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    
+    public String numOfResults(String param) {
+    	try {
+    		int result = Integer.parseInt(param);
+    		switch (result) {
+    		case 25: return "25";
+    		case 50: return "50";
+    		case 100: return "100";
+    		default: return "10";
+    		}
+    	}catch (Exception e){
+    		return "10";
+    	}
+    }
+    
+    
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
-		System.out.println("printing email");
-		System.out.println(username);
-		String password = request.getParameter("password");
+		// TODO Auto-generated method stub
+		
+		String search = request.getParameter("type");
+		String results = request.getParameter("results");
+		String page = request.getParameter("page");
+		
+		results = numOfResults(results);
+		if (page == null) page = "1";
 		
 		String loginUser = "ahtrejo";
         String loginPasswd = "1996Code";
@@ -47,37 +71,56 @@ public class loginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         //System.out.println("Before try loop");
         try {
-        	System.out.println("here");
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
             //System.out.println("here");
             // Declare our statement
             Statement statement = dbcon.createStatement();
+            String query;
+            JsonArray jsonArray = new JsonArray();
+            ResultSet rs;
+            if (search.equals("genre")) {
+            query = "Select name from genres order by name";
+            rs = statement.executeQuery(query);
+           // JsonArray jsonArray = new JsonArray();
             
-            String query = "SELECT * from customers where customers.email = " + "'"+ username+ "'" + " AND customers.password = " + "'"+password+ "'";
+            // Iterate through each row of rs
+            while (rs.next()) {
+                String genre_name = rs.getString("name");
+                //String star_name = rs.getString("name");
+                //String star_dob = rs.getString("birthYear");
+                
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("genre_name", genre_name);
+                //jsonObject.addProperty("star_name", star_name);
+              //  jsonObject.addProperty("star_dob", star_dob);
+                
+                jsonArray.add(jsonObject);
+            }
+            }else {
+            	query = "Select title from movies order by title limit "+ results + " offset " + (Integer.parseInt(page)-1) * 10;
+            
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            rs = statement.executeQuery(query);
             
-            if (rs.next()) {
-            		System.out.println("");
-            		request.getSession().setAttribute("user", new User(username));
-            		JsonObject jsonObject = new JsonObject();
-	            jsonObject.addProperty("status", "success");
-	            jsonObject.addProperty("message", "success");
-	            System.out.println(jsonObject.toString());
-    				out.write(jsonObject.toString());
-	           
+           // JsonArray jsonArray = new JsonArray();
+            
+            // Iterate through each row of rs
+            while (rs.next()) {
+                String genre_name = rs.getString("name");
+                //String star_name = rs.getString("name");
+                //String star_dob = rs.getString("birthYear");
+                
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("genre_name", genre_name);
+                //jsonObject.addProperty("star_name", star_name);
+              //  jsonObject.addProperty("star_dob", star_dob);
+                
+                jsonArray.add(jsonObject);
+            }
             }
             
-            else {
-            		//login fails
-	            	request.getSession().setAttribute("user", new User(username));
-	    			JsonObject responseJsonObject = new JsonObject();
-	    			responseJsonObject.addProperty("status", "fail");
-	    			responseJsonObject.addProperty("message", "email " + username + " doesn't exist");
-	    			//responseJsonObject.addProperty("message", "incorrect password");
-	    			out.write(responseJsonObject.toString());
-            }
+            out.write(jsonArray.toString());
             
             rs.close();
             statement.close();
@@ -95,7 +138,6 @@ public class loginServlet extends HttpServlet {
             return;
         }
         out.close();
-		//doPost(request,response);
 	}
 
 	/**
