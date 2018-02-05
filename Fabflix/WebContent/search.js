@@ -18,7 +18,7 @@ function handleSearchResult(resultDataArray) {
 	else {	
 		console.log("show error message");
 		
-		window.location.replace("/Fabflix/MovieList.html");
+		window.location.replace("/Fabflix/search.html");
 		console.log(resultDataArray["title"]);
 		jQuery("#search_error_message").text(resultDataArray[0]["title"]);
 	}

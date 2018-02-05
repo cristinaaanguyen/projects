@@ -39,14 +39,37 @@
 			<table id=movie_table class="table table-striped">
 		<thead>
 			<tr>
-				<th>Title</th>
+				<th>Movie ID</th>
+				<th> <a href = "/Fabflix/MovieList.html"> Title</a></th>
 				<th>Director</th>
+				<th>Year</th>
+				<th>Genres</th>
+				<th>Stars</th>
 			</tr>
 		</thead>
 		<tbody id=movie_list_table_body>
 		</tbody>
 	</table>
-		
+	<form action="#">
+
+    <input type="hidden" name="currentPage" value="1">
+    
+    <div class="form-group col-md-4">
+
+        <label for="records">Select records per page:</label>
+
+        <select class="form-control" id="records" name="recordsPerPage"> 
+            <option value="5">5</option> 
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+        </select>
+
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+	
 	
 	<div id = "search_error_message"></div>
 	

@@ -1,6 +1,8 @@
+
+
 function handleStarResult(resultDataArray) {
 	console.log("handleStarResult: populating star table from resultData");
-
+	
 	// populate the star table
 	var results = resultDataArray.sort(function(a,b) {
 	    if ( a['title']< b['title'] )
@@ -9,8 +11,9 @@ function handleStarResult(resultDataArray) {
 	        return 1;
 	    return 0;
 	} );
+	
 	var MovieListTableBodyElement = jQuery("#movie_list_table_body");
-	for (var i = 0; i < Math.min(10, results.length); i++) {
+	for (var i = 0; i < Math.min(15, results.length); i++) {
 		var rowHTML = "";
 		rowHTML += "<tr>";
 		rowHTML += "<th>" + results[i]["movieid"] + "</th>";

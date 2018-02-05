@@ -65,6 +65,7 @@ public class Search extends HttpServlet {
             String query = "";
             
             if (!isEmpty(title)) {  	
+            		request.getSession().setAttribute("title", title);
             		if (subquery.contains("and") || !isEmpty(subquery)) {
             			subquery += " and m.title like " + "'%"+ title + "%'";
             		}
@@ -143,8 +144,7 @@ public class Search extends HttpServlet {
 	                			actors += ", "; 
 	                		actors += results.getString("name");
 	            		}
-	            		
-	            		
+
 	            		jsonObject.addProperty("movieid", movieID);
 	            		jsonObject.addProperty("title", movieTitle);
 	            		jsonObject.addProperty("year", movieYear);
@@ -160,8 +160,9 @@ public class Search extends HttpServlet {
            }
             out.write(jsonArray.toString());
             request.getSession().setAttribute("jsonArray", jsonArray);
-            
-            
+            request.getSession().setAttribute("offset", 10);
+            request.getSession().setAttribute("limit", 15);
+    
             rs.close();
             statement.close();
             dbcon.close();

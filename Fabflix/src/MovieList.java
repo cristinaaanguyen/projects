@@ -23,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonArray;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 
 /**
  * Servlet implementation class MovieList
@@ -47,12 +50,34 @@ public class MovieList extends HttpServlet {
 		
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		JsonArray results = (JsonArray) request.getSession().getAttribute("jsonArray");
+		//int offset = (int) request.getSession().getAttribute("offset");
+		//int limit = (int) request.getSession().getAttribute("limit");
+		//System.out.println("printing context path");		
 		System.out.println("Transferred data from one servlet to the other");
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         out.write(results.toString());
-	}
+        try {
+        		System.out.println(request.getSession().getAttribute("title"));
+        		//System.out.print(results.size());
+        		//System.out.print(results);
+        }
+        
+        /*catch (SQLException ex) {
+            while (ex != null) {
+                System.out.println("SQL Exception:  " + ex.getMessage());
+                ex = ex.getNextException();
+            } // end while
+        } // end catch SQLException*/
 
+        catch (java.lang.Exception ex) {
+            out.println("<HTML>" + "<HEAD><TITLE>" + "MovieDB: Error" + "</TITLE></HEAD>\n<BODY>"
+                    + "<P>SQL error in doPost: " + ex.getMessage() + "</P></BODY></HTML>");
+            return;
+        }
+        out.close();
+        
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -60,5 +85,4 @@ public class MovieList extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
