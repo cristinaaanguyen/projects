@@ -1,23 +1,32 @@
 
-function handleSearchResult(resultDataArray) {
+function handleSearchResult(resultDataString) {
 	console.log("Beginning of handle result");
-	console.log(resultDataArray);
+	console.log(resultDataString);
 	//resultDataJson = JSON.parse(resultDataString);
 	
 	
-	console.log(resultDataArray);
-	console.log(resultDataArray[0]["title"]);
+	console.log(resultDataString);
+	console.log(resultDataString["title"]);
 
 	// if search success, redirect to index.html page
-	if (resultDataArray[0]["title"] != "failed") {
-		console.log("title is valid");
-		window.location.replace("/Fabflix/MovieList.html");
-		console.log(results);
-		
-	} 
+	if (resultDataString["title"] != "") {
+		if (resultDataString["title"] != "") {
+			console.log("title is valid");
+			var url = new URL("http://localhost:8080/Fabflix/MovieList.html")
+			url.searchParams.set('title', resultDataString['title']);
+			url.searchParams.set('year', resultDataString["year"]);
+			url.searchParams.set('director', resultDataString["director"]);
+			url.searchParams.set('starfn', resultDataString["starfn"]);
+			url.searchParams.set('starln', resultDataString["starln"]);
+			var modifiedUrl = url.toString();
+			console.log(modifiedUrl);
+			//var title = resultDataString["title"].split(' ').join('%20')
+			//window.location.href = modifiedUrl;
+			window.location.replace(modifiedUrl);
+			}
+		} 
 	else {	
 		console.log("show error message");
-		
 		window.location.replace("/Fabflix/search.html");
 		console.log(resultDataArray["title"]);
 		jQuery("#search_error_message").text(resultDataArray[0]["title"]);
