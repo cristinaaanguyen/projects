@@ -1,5 +1,4 @@
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -57,23 +56,26 @@ public class MovieList extends HttpServlet {
 		System.out.println("Print url");
 		String url = request.getRequestURL().toString() + request.getQueryString();
 		System.out.println(url);
-		System.out.println("Print title parameter");
+		System.out.println("Print title parameter or artist");
 		System.out.println(title);
+		System.out.println(starfn);
 
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
         response.setContentType("application/json"); // Response mime type
         String query = makeQuery(request, title, year, director, starfn, starln);
-        String button = request.getParameter("button");
+        String type = request.getParameter("order");
+        int limit = 10;
+        String ordering= "";
+        if (!isEmpty(request.getParameter("limit"))){
+        		System.out.println("limit is not empty");
+            limit = Integer.parseInt(request.getParameter("limit"));
+        }
         System.out.println("Printing button value");
-        System.out.println(button);
-        if ("title".equals(button)) {
-        		query = updateQuery(query, "DESC", button, 10, 0);
-        }
-        if ("year".equals(button)) {
-    			query = updateQuery(query, "DESC", button, 10, 0);
-        }
+        System.out.println(type);
+        
+        	query = updateQuery(query, ordering, type, limit, 0);
     
         System.out.println(query);
         PrintWriter out = response.getWriter();
@@ -92,7 +94,7 @@ public class MovieList extends HttpServlet {
 	}
 	
 	boolean isEmpty(String s) {
-		if (s != null && !s.equals("")) {
+		if (s != null && !s.equals("") && !s.equals("null")) {
 		    return false;
 		} 
 		
@@ -166,7 +168,7 @@ public class MovieList extends HttpServlet {
 	        if (!rs.isBeforeFirst()) {
 	        	 	JsonObject jsonObject = new JsonObject();
 	        		System.out.println("No results found");
-	        		jsonObject.addProperty("title", "failed");
+	        		jsonObject.addProperty("errmsg", "failed");
 	        		//out.write(jsonObject.toString());
 	        		jsonArray.add(jsonObject);
 	        		System.out.println(jsonObject.toString());
@@ -177,8 +179,11 @@ public class MovieList extends HttpServlet {
 	        else {
 	        		System.out.println("results found");
 	        		System.out.println(rs);
+	        		JsonObject jsonObj = new JsonObject();
+	        		jsonObj.addProperty("errmsg", "success");
+	        		jsonArray.add(jsonObj);
 	            while (rs.next()) {
-	            	 	JsonObject jsonObject = new JsonObject();
+	        			JsonObject jsonObject = new JsonObject();
 	            		//System.out.println("inside while loop");
 	            		String movieID = rs.getString("id");
 	            		String movieTitle = rs.getString("title");
@@ -186,6 +191,9 @@ public class MovieList extends HttpServlet {
 	            		String movieDirector = rs.getString("director");
 	            		String m_genres = "";
 	                String queryGenre = "SELECT G.name from genres G, genres_in_movies GM where G.id = GM.genreId and GM.movieId = \""+ movieID + "\"";;
+            			String movieStar = ""; 
+            			if (!isEmpty(starfn) || !isEmpty(starln))
+            				movieStar = rs.getString("name");
 	                ResultSet genresResults = statementGenre.executeQuery(queryGenre);
 	                    
 	                while (genresResults.next()) {
@@ -195,9 +203,7 @@ public class MovieList extends HttpServlet {
 	                    		m_genres += m_gmid;
 	                    }
 	                
-	            		String movieStar = ""; 
-	            		if (!isEmpty(starfn) || !isEmpty(starln))
-	            			movieStar = rs.getString("name");
+
 	            		String queryStars = "select s.name from movies m, stars_in_movies ms, stars s where "
 	            				+ "m.id = " + "'"+ movieID + "'" + " and ms.movieID = m.id and ms.starId = s.id";
 	            				;
@@ -217,14 +223,13 @@ public class MovieList extends HttpServlet {
 	            		jsonObject.addProperty("stars", actors);
 	            		jsonObject.addProperty("genres", m_genres);
 	            		
-	            		//System.out.println(jsonObject.toString());
+	            		System.out.println(jsonObject.toString());
 	            		jsonArray.add(jsonObject);
 	            		//out.write(jsonObject.toString());
 	            }
 	       }
 	        out.write(jsonArray.toString());
-	        request.getSession().setAttribute("jsonArray", jsonArray);
-	
+	        //request.getSession().setAttribute("jsonArray", jsonArray);
 	        rs.close();
 	        statement.close();
 	        dbcon.close(); 
@@ -282,5 +287,5 @@ public class MovieList extends HttpServlet {
 		}
 		return query;
 	}
-
+	
 }

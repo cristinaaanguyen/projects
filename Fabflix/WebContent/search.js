@@ -1,4 +1,5 @@
 
+
 function handleSearchResult(resultDataString) {
 	console.log("Beginning of handle result");
 	console.log(resultDataString);
@@ -9,8 +10,7 @@ function handleSearchResult(resultDataString) {
 	console.log(resultDataString["title"]);
 
 	// if search success, redirect to index.html page
-	if (resultDataString["title"] != "") {
-		if (resultDataString["title"] != "") {
+	if (resultDataString["title"] != "failed") {
 			console.log("title is valid");
 			var url = new URL("http://localhost:8080/Fabflix/MovieList.html")
 			url.searchParams.set('title', resultDataString['title']);
@@ -23,7 +23,6 @@ function handleSearchResult(resultDataString) {
 			//var title = resultDataString["title"].split(' ').join('%20')
 			//window.location.href = modifiedUrl;
 			window.location.replace(modifiedUrl);
-			}
 		} 
 	else {	
 		console.log("show error message");
