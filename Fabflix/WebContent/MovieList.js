@@ -27,11 +27,18 @@ function handleStarResult(resultDataArray) {
 	}
 }
 
+var url = new URL( window.location.href);
+var title = url.searchParams.get("title");
+console.log("printing title from js file")
+console.log(title);
+
 // makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
 	  dataType: "json",
 	  method: "GET",
-	  url: "/Fabflix/MovieList",
+	  url: "/Fabflix/MovieList?&browse=" + url.searchParams.get("browse") + "&genre="+ url.searchParams.get("genre") +"&title="+ title + "&year=" + 
+	  url.searchParams.get("year") + "&director=" +  url.searchParams.get("director")+
+	  "&starfn="+ url.searchParams.get("starfn") + "&starln="+ url.searchParams.get("starln"),
 	  success: (resultData) => handleStarResult(resultData)
 });
 
