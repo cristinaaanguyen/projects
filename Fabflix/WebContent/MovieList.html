@@ -35,8 +35,9 @@
 	
 	<div> <h1> Movie List </h1> </div>
 		<form id = "ordering_by"action="#" method= "post">
-			<button type="submit" name="button" class = "order" value="title">Order by Title</button>
-			 <button type="submit" name="button" class = "order" value="year">Order by Year</button>
+			<button type="submit" class = "order" value="year">Order by Year</button>
+		
+			<button type="submit" class = "order" value="title">Order by Title</button>
 		</form>
 			<table id=movie_table class="table table-striped">
 		<thead>
@@ -58,7 +59,7 @@
 	        <label for="records">Select records per page:</label>
 	        <select class="form-control" id="records" name="recordsPerPage"> 
 	            <option value="5">5</option> 
-	            <option value="10" selected>10</option>
+	            <option value="10">10</option>
 	            <option value="15">15</option>
 	        </select>
 	    </div>

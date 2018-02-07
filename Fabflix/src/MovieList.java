@@ -72,10 +72,11 @@ public class MovieList extends HttpServlet {
         		System.out.println("limit is not empty");
             limit = Integer.parseInt(request.getParameter("limit"));
         }
-        System.out.println("Printing button value");
+        System.out.println("Printing type to sort by");
         System.out.println(type);
-        
-        	query = updateQuery(query, ordering, type, limit, 0);
+        if ("title".equals(type) ||"year".equals(type) ) {
+        		query = updateQuery(query, ordering, type, limit, 0);
+        }
     
         System.out.println(query);
         PrintWriter out = response.getWriter();
@@ -272,7 +273,7 @@ public class MovieList extends HttpServlet {
 	
 	String updateQuery(String query, String order, String type, int limit, int offset) {
 		if (!isEmpty(type)) {
-			query += "order by " + "m."+type;
+			query += " order by " + "m."+type;
 		}
 		
 		if (!isEmpty(order)) {

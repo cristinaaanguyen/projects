@@ -23,22 +23,26 @@ function handleStarResult(resultDataArray) {
 	}
 }
 
+
 var url = new URL( window.location.href);
-var title = url.searchParams.get("title");
+//var title = url.searchParams.get("title");
+var q = window.location.href.split('?');
+console.log(q[1]);
+var remainingquery = q[1];
+/*
 console.log("printing title from js file")
 console.log(title);
 console.log("printing button val from js file");
 
 var val = $('button').val();
 console.log(val);
+*/
 // makes the HTTP GET request and registers on success callback function handleStarResult
 
 jQuery.ajax({
 	  dataType: "json",
 	  method: "GET",
-	  url: "/Fabflix/MovieList?title="+ title + "&year=" + 
-	  url.searchParams.get("year") + "&director=" +  url.searchParams.get("director")+
-	  "&starfn="+ url.searchParams.get("starfn") + "&starln="+ url.searchParams.get("starln"),
+	  url: "/Fabflix/MovieList?" + q[1],
 	  success: (resultData) => handleStarResult(resultData)
 });
 
@@ -46,9 +50,7 @@ jQuery.ajax({
 
 
 
-
 /*
-
 function submitForm(formSubmitEvent) {
 	console.log("submit form");
 	
@@ -76,7 +78,6 @@ function submitForm(formSubmitEvent) {
 
 jQuery("#ordering_by").submit((event) => submitForm(event));
 
-
 */
 
 $('.order').click(function (event){
@@ -85,12 +86,14 @@ $('.order').click(function (event){
             	var val = $(this).val();
             	console.log(val);
             	var q = window.location.href.split('?');
+            	console.log(q[1]);
             	var remainingquery = q[1];
+            	
             	var url_full = 	"/Fabflix/MovieList.html?" + remainingquery + "&order=" + val;
+            	console.log("printing url after choosing to sort by title or year");
+            	console.log(url_full);
             	window.location.replace(url_full);
 });
-
-
 
 
 $('.pagination').click(function (event){
@@ -100,7 +103,8 @@ $('.pagination').click(function (event){
     	console.log(limit);
     	var q = window.location.href.split('?');
     	var remainingquery = q[1];
-    	
+    	console.log("printing remaining query in .pagination");
+    	console.log(remainingquery);
     	var url_full = 	"/Fabflix/MovieList.html?" + remainingquery + "&limit=" + limit;
     	window.location.replace(url_full);
    
