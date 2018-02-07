@@ -1,25 +1,5 @@
 
-<<<<<<< HEAD
-function handleSearchResult(resultDataArray) {
-	console.log("Beginning of handle result");
-	console.log(resultDataArray);
-	//resultDataJson = JSON.parse(resultDataString);
-	
-	
-	console.log(resultDataArray);
-	console.log(resultDataArray[0]["title"]);
 
-	// if search success, redirect to index.html page
-	if (resultDataArray[0]["title"] != "failed") {
-		console.log("title is valid");
-		window.location.replace("/Fabflix/MovieList.html");
-		console.log(results);
-		
-	} 
-	else {	
-		console.log("show error message");
-		
-=======
 
 function handleSearchResult(resultDataString) {
 	console.log("Beginning of handle result");
@@ -47,7 +27,6 @@ function handleSearchResult(resultDataString) {
 		} 
 	else {	
 		console.log("show error message");
->>>>>>> 4a5f97a7f90f41617c72f53b682f6c5fba57d616
 		window.location.replace("/Fabflix/search.html");
 		console.log(resultDataArray["title"]);
 		jQuery("#search_error_message").text(resultDataArray[0]["title"]);

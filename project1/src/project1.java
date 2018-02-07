@@ -22,8 +22,8 @@ public class project1 extends HttpServlet {
     // Use http GET
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
+        String loginUser = "ahtrejo";
+        String loginPasswd = "1996Code";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
         
 
