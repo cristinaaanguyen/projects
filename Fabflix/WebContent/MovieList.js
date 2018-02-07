@@ -85,12 +85,15 @@ $('.order').click(function (event){
             	//formSubmitEvent.preventDefault();
             	var val = $(this).val();
             	console.log(val);
+            	
             	var q = window.location.href.split('?');
             	console.log(q[1]);
             	var remainingquery = q[1];
-            	
+            	/*
             	var url_full = 	"/Fabflix/MovieList.html?" + remainingquery + "&order=" + val;
             	console.log("printing url after choosing to sort by title or year");
+            	*/
+            	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], "order", val);
             	console.log(url_full);
             	window.location.replace(url_full);
 });
@@ -109,4 +112,22 @@ $('.pagination').click(function (event){
     	window.location.replace(url_full);
    
 });
+
+
+function queryStringUrlReplacement(url, param, value) 
+{
+    var re = new RegExp("[\\?&]" + param + "=([^&#]*)"), match = re.exec(url), delimiter, newString;
+
+    if (match === null) {
+        // append new param
+        var hasQuestionMark = /\?/.test(url); 
+        delimiter = hasQuestionMark ? "&" : "?";
+        newString = url + delimiter + param + "=" + value;
+    } else {
+        delimiter = match[0].charAt(0);
+        newString = url.replace(re, delimiter + param + "=" + value);
+    }
+
+    return newString;
+}
 
