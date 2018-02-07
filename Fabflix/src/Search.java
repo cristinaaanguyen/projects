@@ -44,13 +44,18 @@ public class Search extends HttpServlet {
 		String director = request.getParameter("director");
 		String starfn = request.getParameter("firstname");
 		String starln = request.getParameter("lastname");
+<<<<<<< HEAD
 		String loginUser = "ahtrejo";
         String loginPasswd = "1996Code";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
+=======
+
+>>>>>>> 4a5f97a7f90f41617c72f53b682f6c5fba57d616
         response.setContentType("application/json"); // Response mime type
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
+<<<<<<< HEAD
         //System.out.println("Before try loop");
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -173,6 +178,22 @@ public class Search extends HttpServlet {
             } // end while
         } // end catch SQLException
 
+=======
+
+        try {
+		    		JsonObject jsonObject = new JsonObject();
+		        jsonObject.addProperty("title", title);
+		        jsonObject.addProperty("year", year);
+		        jsonObject.addProperty("director", director);
+		        jsonObject.addProperty("starfn", starfn);
+		        jsonObject.addProperty("starln", starln);
+		        System.out.println(jsonObject.toString());
+				out.write(jsonObject.toString());
+           }
+    
+
+        
+>>>>>>> 4a5f97a7f90f41617c72f53b682f6c5fba57d616
         catch (java.lang.Exception ex) {
             out.println("<HTML>" + "<HEAD><TITLE>" + "MovieDB: Error" + "</TITLE></HEAD>\n<BODY>"
                     + "<P>SQL error in doPost: " + ex.getMessage() + "</P></BODY></HTML>");

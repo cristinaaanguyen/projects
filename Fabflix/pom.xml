@@ -1,7 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+<<<<<<< HEAD
   <groupId>Fabflix</groupId>
   <artifactId>Fabflix</artifactId>
+=======
+<<<<<<< HEAD
+  <groupId>project1</groupId>
+  <artifactId>project1</artifactId>
+=======
+  <groupId>Fabflix</groupId>
+  <artifactId>Fabflix</artifactId>
+>>>>>>> cristina
+>>>>>>> 4a5f97a7f90f41617c72f53b682f6c5fba57d616
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
    <dependencies>
@@ -23,7 +33,14 @@
     </dependency>
   </dependencies>
   <build>
+<<<<<<< HEAD
   	<finalName>Fabflix</finalName>
+=======
+<<<<<<< HEAD
+=======
+  	<finalName>Fabflix</finalName>
+>>>>>>> cristina
+>>>>>>> 4a5f97a7f90f41617c72f53b682f6c5fba57d616
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
