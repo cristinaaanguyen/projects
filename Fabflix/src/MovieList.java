@@ -122,7 +122,7 @@ public class MovieList extends HttpServlet {
             String type = request.getParameter("order");
             int limit = 10;
             String ordering = request.getParameter("ordering");
-            
+         
             System.out.println("here");
             if (!isEmpty(request.getParameter("limit"))){
             		System.out.println("limit is not empty");
@@ -215,6 +215,7 @@ public class MovieList extends HttpServlet {
 
 			String loginUser = "mytestuser";
 	        String loginPasswd = "mypassword";
+
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();

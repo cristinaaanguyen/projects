@@ -19,9 +19,10 @@
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="mysql-connector-java-5.1.45-bin.jar">
+	<classpathentry kind="lib" path="C:/Users/Alext/gitclones/cs122b-winter18-team-37/Fabflix/mysql-connector-java-5.1.45-bin.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
