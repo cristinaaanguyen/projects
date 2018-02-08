@@ -117,6 +117,7 @@ public class MovieList extends HttpServlet {
         }else {
         	query = makeQuery(request, title, year, director, starfn, starln);
         }
+<<<<<<< HEAD
             String type = request.getParameter("order");
             int limit = 10;
             String ordering= "";
@@ -129,6 +130,14 @@ public class MovieList extends HttpServlet {
             
             	query = updateQuery(query, ordering, type, limit, 0);
         
+=======
+        System.out.println("Printing type to sort by");
+        System.out.println(type);
+        if ("title".equals(type) ||"year".equals(type) ) {
+        		query = updateQuery(query, ordering, type, limit, 0);
+        }
+    
+>>>>>>> 0f73ff172e5230cb868562b772da12ce2ebcc913
         System.out.println(query);
         PrintWriter out = response.getWriter();
         executeSearchQuery(request, query, out, starfn, starln);        // Output stream to STDOUT
@@ -335,7 +344,7 @@ public class MovieList extends HttpServlet {
 	
 	String updateQuery(String query, String order, String type, int limit, int offset) {
 		if (!isEmpty(type)) {
-			query += "order by " + "m."+type;
+			query += " order by " + "m."+type;
 		}
 		
 		if (!isEmpty(order)) {
