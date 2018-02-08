@@ -38,8 +38,10 @@ public class loginServlet extends HttpServlet {
 		System.out.println(username);
 		String password = request.getParameter("password");
 		
-		String loginUser = "ahtrejo";
-        String loginPasswd = "1996Code";
+
+		String loginUser = "mytestuser";
+        String loginPasswd = "mypassword";
+
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         response.setContentType("application/json"); // Response mime type
         

@@ -121,7 +121,8 @@ public class MovieList extends HttpServlet {
         }
             String type = request.getParameter("order");
             int limit = 10;
-            String ordering= "";
+            String ordering = request.getParameter("ordering");
+         
             System.out.println("here");
             if (!isEmpty(request.getParameter("limit"))){
             		System.out.println("limit is not empty");
@@ -212,8 +213,9 @@ public class MovieList extends HttpServlet {
 	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln) {
 		try {
 
-			String loginUser = "ahtrejo";
-	        String loginPasswd = "1996Code";
+			String loginUser = "mytestuser";
+	        String loginPasswd = "mypassword";
+
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -270,15 +272,17 @@ public class MovieList extends HttpServlet {
 	                    }
 	                
 
-	            		String queryStars = "select s.name from movies m, stars_in_movies ms, stars s where "
+	            		String queryStars = "select s.name, s.id from movies m, stars_in_movies ms, stars s where "
 	            				+ "m.id = " + "'"+ movieID + "'" + " and ms.movieID = m.id and ms.starId = s.id";
 	            				;
 	            		ResultSet results = statementStars.executeQuery(queryStars);
-	            		String actors = "";
+
+	            		JsonArray jsonStarArray = new JsonArray();
 	            		while(results.next()) {
-	                		if (actors != "") 
-	                			actors += ", "; 
-	                		actors += results.getString("name");
+	            			JsonObject jsonStarInfo = new JsonObject();
+	            			jsonStarInfo.addProperty("starid", results.getString("id"));
+	            			jsonStarInfo.addProperty("name", results.getString("name"));
+	            			jsonStarArray.add(jsonStarInfo);
 	            		}
 	
 	            		jsonObject.addProperty("movieid", movieID);
@@ -286,7 +290,8 @@ public class MovieList extends HttpServlet {
 	            		jsonObject.addProperty("year", movieYear);
 	            		jsonObject.addProperty("director", movieDirector); 
 	            		jsonObject.addProperty("star", movieStar);
-	            		jsonObject.addProperty("stars", actors);
+	            		System.out.println(jsonStarArray.toString());
+	            		jsonObject.add("stars", jsonStarArray);
 	            		jsonObject.addProperty("genres", m_genres);
 	            		
 
@@ -343,11 +348,11 @@ public class MovieList extends HttpServlet {
 		
 		if (!isEmpty(type)) {
 			query += " order by " + "m."+type;
+			if (!isEmpty(order)) {
+				query += " " + order;
+			}
 		}
 		
-		if (!isEmpty(order)) {
-			query += " " + order;
-		}
 		
 		if (limit != 0){
 			query += " limit " + limit;
