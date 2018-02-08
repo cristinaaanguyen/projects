@@ -117,7 +117,7 @@ $('.order').click(function (event){
 });
 
 
-$('.pagination').click(function (event){
+$('.limit').click(function (event){
 	event.preventDefault();
     	//formSubmitEvent.preventDefault();
     	var limit = $("#records").val();

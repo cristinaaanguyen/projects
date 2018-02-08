@@ -73,7 +73,7 @@
 		<tbody id=movie_list_table_body>
 		</tbody>
 	</table>
-	<form action="#">
+	<form action="#" class ="form-inline">
 	    <input type="hidden" name="currentPage" value="1">
 	    <div class="form-group col-md-4">
 	        <label for="records">Select records per page:</label>
@@ -82,10 +82,27 @@
 	            <option value="10">10</option>
 	            <option value="15">15</option>
 	        </select>
+	        	<button type="submit" class="btn btn-primary limit">Submit</button>
 	    </div>
-	    <button type="submit" class="btn btn-primary pagination">Submit</button>
+
 	</form>
 
+
+	<nav aria-label="...">
+	  <ul class="pagination">
+	    <li class="page-item disabled">
+	      <a class="page-link" href="#" tabindex="-1">Previous</a>
+	    </li>
+	    <li class="page-item"><a class="page-link" href="#">1</a></li>
+	    <li class="page-item active">
+	      <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+	    </li>
+	    <li class="page-item"><a class="page-link" href="#">3</a></li>
+	    <li class="page-item">
+	      <a class="page-link" href="#">Next</a>
+	    </li>
+	  </ul>
+	</nav>
 	
 	<div id = "search_error_message"></div>
 	
