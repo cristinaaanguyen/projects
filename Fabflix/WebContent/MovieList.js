@@ -43,13 +43,7 @@ console.log(val);
 jQuery.ajax({
 	  dataType: "json",
 	  method: "GET",
-<<<<<<< HEAD
-	  url: "/Fabflix/MovieList?&browse=" + url.searchParams.get("browse") + "&genre="+ url.searchParams.get("genre") +"&title="+ title + "&year="+
-	  url.searchParams.get("year") + "&director=" +  url.searchParams.get("director")+
-	  "&starfn="+ url.searchParams.get("starfn") + "&starln="+ url.searchParams.get("starln"),
-=======
 	  url: "/Fabflix/MovieList?" + q[1],
->>>>>>> 0f73ff172e5230cb868562b772da12ce2ebcc913
 	  success: (resultData) => handleStarResult(resultData)
 });
 

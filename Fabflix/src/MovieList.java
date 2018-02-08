@@ -73,7 +73,8 @@ public class MovieList extends HttpServlet {
     public String browseQuery(String genre, String title) {
     	String query;
     	System.out.println("genre = " + genre);
-    	if (!genre.equals("null")) {
+
+    	if (genre != null) {
     		query = "select m.id, m.title, m.year, m.director from movies m, genres g, genres_in_movies gm "+
     			    "where m.id = gm.movieId and g.id = gm.genreId and g.name = \""+ genre + "\"";
     	} else {
@@ -112,32 +113,28 @@ public class MovieList extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
 
         String query;
-        if (browse.equals("true")) {
+        //System.out.println("browse is"+ browse);
+        if (browse != null && !isEmpty(browse) ) {
         	query = browseQuery(genre, title);
         }else {
         	query = makeQuery(request, title, year, director, starfn, starln);
         }
-<<<<<<< HEAD
             String type = request.getParameter("order");
             int limit = 10;
             String ordering= "";
+            System.out.println("here");
             if (!isEmpty(request.getParameter("limit"))){
             		System.out.println("limit is not empty");
                 limit = Integer.parseInt(request.getParameter("limit"));
+                
             }
-            System.out.println("Printing button value");
-            System.out.println(type);
             
-            	query = updateQuery(query, ordering, type, limit, 0);
-        
-=======
         System.out.println("Printing type to sort by");
         System.out.println(type);
-        if ("title".equals(type) ||"year".equals(type) ) {
-        		query = updateQuery(query, ordering, type, limit, 0);
-        }
+       // if ("title".equals(type) ||"year".equals(type) ) {
+        query = updateQuery(query, ordering, type, limit, 0);
+       // }
     
->>>>>>> 0f73ff172e5230cb868562b772da12ce2ebcc913
         System.out.println(query);
         PrintWriter out = response.getWriter();
         executeSearchQuery(request, query, out, starfn, starln);        // Output stream to STDOUT
@@ -333,16 +330,17 @@ public class MovieList extends HttpServlet {
 			
 		}
 		else if (!isEmpty(fn) && isEmpty(ln)) {
-			s += "ms.movieId = m.id and ms.starId = s.id and s.name like " + "'"+ fn + "%'";
+			s += "ms.movieId = m.id and ms.starId = s.id and s.name like " + "'%"+ fn + "%'";
 			
 		}
 		else if (isEmpty(fn) && !isEmpty(ln)) {
-			s += "ms.movieId = m.id and ms.starId = s.id and s.name like " + "'%"+ ln + "'";
+			s += "ms.movieId = m.id and ms.starId = s.id and s.name like " + "'%"+ ln + "%'";
 		}
 		return s;
 	}
 	
 	String updateQuery(String query, String order, String type, int limit, int offset) {
+		
 		if (!isEmpty(type)) {
 			query += " order by " + "m."+type;
 		}
