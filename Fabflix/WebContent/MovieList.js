@@ -1,5 +1,19 @@
 
 
+function handleStarsInMovie(resultDataArrayStar){
+	var res = "";
+	console.log("trying to link the stars");
+	for (var i = 0; i < resultDataArrayStar.length; i++){
+		if (i != 0 ){
+			res += ", ";
+		}
+		console.log("printing starid");
+		console.log(resultDataArrayStar[i]["starid"]);
+		res += "<a href = \"\MovieStar.html?id=" + resultDataArrayStar[i]["starid"] + "\">" + resultDataArrayStar[i]["name"] + "</a>"
+		console.log(res);}
+	return res;
+}
+
 function handleStarResult(resultDataArray) {
 	console.log("handleStarResult: populating star table from resultData");
 	
@@ -16,7 +30,10 @@ function handleStarResult(resultDataArray) {
 			rowHTML += "<th>" + resultDataArray[i]["director"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["year"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
-			rowHTML += "<th>" + resultDataArray[i]["stars"] + "</th>";
+			console.log("printing list of stars");
+			console.log(resultDataArray[i]["stars"]);
+			rowHTML += "<th>" + handleStarsInMovie(resultDataArray[i]["stars"]) + "</th>";
+			console.log(rowHTML);
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
 		}
@@ -32,6 +49,7 @@ var remainingquery = q[1];
 /*
 console.log("printing title from js file")
 console.log(title);
+
 console.log("printing button val from js file");
 
 var val = $('button').val();
@@ -108,10 +126,38 @@ $('.pagination').click(function (event){
     	var remainingquery = q[1];
     	console.log("printing remaining query in .pagination");
     	console.log(remainingquery);
-    	var url_full = 	"/Fabflix/MovieList.html?" + remainingquery + "&limit=" + limit;
+    	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], "limit", limit);
+    	console.log(url_full);
     	window.location.replace(url_full);
    
 });
+
+
+function getRadioValue(theRadioGroup)
+{
+    var elements = document.getElementsByName(theRadioGroup);
+    for (var i = 0, l = elements.length; i < l; i++)
+    {
+        if (elements[i].checked)
+        {
+            return elements[i].value;
+        }
+    }
+}
+
+function validateRadio(order){
+	console.log("printing asc or desc");
+	//var ordering = $("$this").val();
+	console.log(order);
+	var q = window.location.href.split('?');
+	var remainingquery = q[1];
+	console.log("printing remaining query in validateRadio()");
+	console.log(remainingquery);
+	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], "ordering", order);
+	console.log(url_full);
+	window.location.replace(url_full);
+}
+
 
 
 function queryStringUrlReplacement(url, param, value) 

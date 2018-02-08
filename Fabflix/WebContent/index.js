@@ -11,4 +11,5 @@
 
 function redirectTo(sUrl) {
 	window.location.replace(sUrl);
+
 }

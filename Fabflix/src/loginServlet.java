@@ -40,15 +40,17 @@ public class loginServlet extends HttpServlet {
 		
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         response.setContentType("application/json"); // Response mime type
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         //System.out.println("Before try loop");
         try {
+        	System.out.println("here");
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+            //System.out.println("here");
             // Declare our statement
             Statement statement = dbcon.createStatement();
             
@@ -73,7 +75,7 @@ public class loginServlet extends HttpServlet {
 	    			JsonObject responseJsonObject = new JsonObject();
 	    			responseJsonObject.addProperty("status", "fail");
 	    			responseJsonObject.addProperty("message", "email " + username + " doesn't exist");
-	    			responseJsonObject.addProperty("message", "incorrect password");
+	    			//responseJsonObject.addProperty("message", "incorrect password");
 	    			out.write(responseJsonObject.toString());
             }
             

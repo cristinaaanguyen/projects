@@ -1,5 +1,6 @@
 
 
+
 function handleSearchResult(resultDataString) {
 	console.log("Beginning of handle result");
 	console.log(resultDataString);

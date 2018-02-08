@@ -37,6 +37,7 @@ public class Search extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+	
 		System.out.println("inside doGet");
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String title = request.getParameter("title");
@@ -44,25 +45,20 @@ public class Search extends HttpServlet {
 		String director = request.getParameter("director");
 		String starfn = request.getParameter("firstname");
 		String starln = request.getParameter("lastname");
-
-        response.setContentType("application/json"); // Response mime type
+	response.setContentType("application/json"); // Response mime type
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-
         try {
-		    		JsonObject jsonObject = new JsonObject();
-		        jsonObject.addProperty("title", title);
-		        jsonObject.addProperty("year", year);
-		        jsonObject.addProperty("director", director);
-		        jsonObject.addProperty("starfn", starfn);
-		        jsonObject.addProperty("starln", starln);
-		        System.out.println(jsonObject.toString());
-				out.write(jsonObject.toString());
+        	JsonObject jsonObject = new JsonObject();
+        	jsonObject.addProperty("title", title);
+	        jsonObject.addProperty("year", year);
+	        jsonObject.addProperty("director", director);
+	        jsonObject.addProperty("starfn", starfn);
+	        jsonObject.addProperty("starln", starln);
+	        System.out.println(jsonObject.toString());
+			out.write(jsonObject.toString());
            }
-    
-
-        
         catch (java.lang.Exception ex) {
             out.println("<HTML>" + "<HEAD><TITLE>" + "MovieDB: Error" + "</TITLE></HEAD>\n<BODY>"
                     + "<P>SQL error in doPost: " + ex.getMessage() + "</P></BODY></HTML>");
