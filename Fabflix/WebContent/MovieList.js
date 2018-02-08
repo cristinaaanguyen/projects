@@ -12,7 +12,7 @@ function handleStarResult(resultDataArray) {
 			var rowHTML = "";
 			rowHTML += "<tr>";
 			rowHTML += "<th>"  + resultDataArray[i]["movieid"] + "</th>";
-			rowHTML += "<th>" + resultDataArray[i]["title"] + "</th>";
+			rowHTML += "<th><a href = \"\SingleMovie.html?id="+ resultDataArray[i]["movieid"]+"\">" + resultDataArray[i]["title"] + "<\a></th>";
 			rowHTML += "<th>" + resultDataArray[i]["director"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["year"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
@@ -22,7 +22,7 @@ function handleStarResult(resultDataArray) {
 		}
 	}
 }
-
+//"<th><a id=link"+ String.fromCharCode(i)+" href = \"\MovieList.html?browse=true&title="+ String.fromCharCode(i) + "\">" + String.fromCharCode(i) + "<\a></th>";
 
 var url = new URL( window.location.href);
 //var title = url.searchParams.get("title");
