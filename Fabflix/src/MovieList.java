@@ -213,8 +213,8 @@ public class MovieList extends HttpServlet {
 	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln) {
 		try {
 
-			String loginUser = "mytestuser";
-	        String loginPasswd = "mypassword";
+			String loginUser = "ahtrejo";
+	        String loginPasswd = "1996Code";
 
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
@@ -257,7 +257,7 @@ public class MovieList extends HttpServlet {
 	            		String movieYear = rs.getString("year");
 	            		String movieDirector = rs.getString("director");
 	            		String m_genres = "";
-	            		String queryGenre = "SELECT G.name from genres G, genres_in_movies GM where G.id = GM.genreId and GM.movieId = \""+ movieID + "\"";;
+	            		String queryGenre = "SELECT G.name from genres G, genres_in_movies GM where G.id = GM.genreId and GM.movieId = \""+ movieID + "\"";
 
             			String movieStar = ""; 
             			if (!isEmpty(starfn) || !isEmpty(starln))
