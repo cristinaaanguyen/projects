@@ -109,7 +109,8 @@ $('.pagination').click(function (event){
     	var remainingquery = q[1];
     	console.log("printing remaining query in .pagination");
     	console.log(remainingquery);
-    	var url_full = 	"/Fabflix/MovieList.html?" + remainingquery + "&limit=" + limit;
+    	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], "limit", limit);
+    	console.log(url_full);
     	window.location.replace(url_full);
    
 });
