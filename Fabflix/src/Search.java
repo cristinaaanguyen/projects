@@ -45,6 +45,8 @@ public class Search extends HttpServlet {
 		String director = request.getParameter("director");
 		String starfn = request.getParameter("firstname");
 		String starln = request.getParameter("lastname");
+		int page = 1;
+
 	response.setContentType("application/json"); // Response mime type
         
         // Output stream to STDOUT
@@ -56,6 +58,7 @@ public class Search extends HttpServlet {
 	        jsonObject.addProperty("director", director);
 	        jsonObject.addProperty("starfn", starfn);
 	        jsonObject.addProperty("starln", starln);
+	        jsonObject.addProperty("page", page);
 	        System.out.println(jsonObject.toString());
 			out.write(jsonObject.toString());
            }

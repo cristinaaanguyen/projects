@@ -89,8 +89,6 @@ public class MovieList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("Print parameter from url");
-		//System.out.println(request.getParameter("title"));
 
 		String browse = request.getParameter("browse");
 		String genre = request.getParameter("genre");
@@ -99,25 +97,29 @@ public class MovieList extends HttpServlet {
 		String director = request.getParameter("director");
 		String starfn = request.getParameter("starfn");
 		String starln = request.getParameter("starln");
+		int page = 1;
+		if (!isEmpty(request.getParameter("page")))
+			page = Integer.parseInt(request.getParameter("page"));
+		
+		
+		System.out.println("Print curr page");
+		System.out.println(page);
 		System.out.println("Print url");
 		String url = request.getRequestURL().toString() + request.getQueryString();
 		System.out.println(url);
-
-		System.out.println("Print title parameter or artist");
-		System.out.println(title);
-		System.out.println(starfn);
 
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
         response.setContentType("application/json"); // Response mime type
 
-        String query;
+        String query = "";
         //System.out.println("browse is"+ browse);
         if (browse != null && !isEmpty(browse) ) {
-        	query = browseQuery(genre, title);
-        }else {
-        	query = makeQuery(request, title, year, director, starfn, starln);
+        		query = browseQuery(genre, title);
+        }
+        else {
+        		query = makeQuery(request, title, year, director, starfn, starln);
         }
             String type = request.getParameter("order");
             int limit = 10;
@@ -132,13 +134,16 @@ public class MovieList extends HttpServlet {
             
         System.out.println("Printing type to sort by");
         System.out.println(type);
-       // if ("title".equals(type) ||"year".equals(type) ) {
-        query = updateQuery(query, ordering, type, limit, 0);
-       // }
-    
+        System.out.println("printing total count from results");
+        int count = getTotalCount(query);
+        System.out.println(count);
+        
+        int totalpages = count/limit;
+        query = updateQuery(query, ordering, type, limit, (page-1)*limit);
+
         System.out.println(query);
         PrintWriter out = response.getWriter();
-        executeSearchQuery(request, query, out, starfn, starln);        // Output stream to STDOUT
+        executeSearchQuery(request, query, out, starfn, starln, totalpages);        // Output stream to STDOUT
 		//doPost(request,response);
         
 
@@ -175,7 +180,7 @@ public class MovieList extends HttpServlet {
 	String makeQuery(HttpServletRequest request, String title, String year, String director, String starln, String starfn) {
         String base = "SELECT * from movies m";
         String subquery = "";
-        String query = "";
+
         
         if (!isEmpty(title)) {  	
         		request.getSession().setAttribute("title", title);
@@ -210,11 +215,12 @@ public class MovieList extends HttpServlet {
 	}
 	
 	
-	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln) {
+	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln, int pages) {
+		System.out.println("Inside execute query");
 		try {
 
-			String loginUser = "ahtrejo";
-	        String loginPasswd = "1996Code";
+			String loginUser = "mytestuser";
+	        String loginPasswd = "mypassword";
 
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
@@ -233,8 +239,6 @@ public class MovieList extends HttpServlet {
 	        		System.out.println("No results found");
 
 	        		jsonObject.addProperty("errmsg", "failed");
-
-	        		//out.write(jsonObject.toString());
 	        		jsonArray.add(jsonObject);
 	        		System.out.println(jsonObject.toString());
 	        		System.out.println("Wrote JSON object to string");
@@ -247,6 +251,7 @@ public class MovieList extends HttpServlet {
 
 	        		JsonObject jsonObj = new JsonObject();
 	        		jsonObj.addProperty("errmsg", "success");
+	        		jsonObj.addProperty("pages", pages);
 	        		jsonArray.add(jsonObj);
 	            while (rs.next()) {
 	        			JsonObject jsonObject = new JsonObject();
@@ -295,7 +300,7 @@ public class MovieList extends HttpServlet {
 	            		jsonObject.addProperty("genres", m_genres);
 	            		
 
-	            		System.out.println(jsonObject.toString());
+	            		//System.out.println(jsonObject.toString());
 	            		jsonArray.add(jsonObject);
 	            		//out.write(jsonObject.toString());
 	            }
@@ -321,7 +326,7 @@ public class MovieList extends HttpServlet {
         }
 		out.close();
 	}
-	
+	//adds the stars from each movie
 	String addStarQuery(String s, String fn, String ln) {
 		if (s.contains("and") || !isEmpty(s)) {
 			//System.out.println(s);
@@ -343,7 +348,7 @@ public class MovieList extends HttpServlet {
 		}
 		return s;
 	}
-	
+	//updates query with ordering, limit and offset
 	String updateQuery(String query, String order, String type, int limit, int offset) {
 		
 		if (!isEmpty(type)) {
@@ -362,5 +367,53 @@ public class MovieList extends HttpServlet {
 		}
 		return query;
 	}
+	//removes the string before the a certain word, so we can replace with count
+	String makeCountQuery(String query, String word) {
+		return "select count(*) "+query.substring(query.indexOf(word));
+		
+	}
 
+	
+	//executecountquery will return the # of rows in the results, 0 if no results are found
+	int getTotalCount(String query) {
+		int count = 0;
+		try {
+			
+			String loginUser = "mytestuser";
+	        String loginPasswd = "mypassword";
+	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
+	        Class.forName("com.mysql.jdbc.Driver").newInstance();
+	        Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+			Statement statement = dbcon.createStatement();
+			//removes words before the where clause, and we replace the beginning to find the count
+			System.out.println("before making count query");
+			query = makeCountQuery(query, "from");
+			System.out.println("after making count query");
+			System.out.println(query);
+	        ResultSet rs = statement.executeQuery(query);
+			System.out.println("after executing count query");
+
+	        //get count from results
+			if (rs.next())
+				count = Integer.parseInt(rs.getString(1));
+	        System.out.println("after executing count query");
+	        rs.close();
+	        statement.close();
+	        dbcon.close(); 
+		} catch (SQLException ex) {
+            while (ex != null) {
+                System.out.println("SQL Exception:  " + ex.getMessage());
+                ex = ex.getNextException();
+            } // end while
+        } // end catch SQLException
+		
+        catch (java.lang.Exception ex) {
+        		System.out.print("exception in java.lang");
+            return count;
+        }
+		
+		return count;
+	}
 }
+	
+

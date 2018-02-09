@@ -37,8 +37,8 @@ public class SingleEntity extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String loginUser = "ahtrejo";
-        String loginPasswd = "1996Code";
+		String loginUser = "mytestuser";
+        String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         
         String MovieId = request.getParameter("Movieid");
@@ -57,7 +57,7 @@ public class SingleEntity extends HttpServlet {
            
             JsonObject jsonObject = new JsonObject();
 
-            
+            System.out.println("MovieID: " + MovieId);
             if (MovieId != null) {
             	System.out.println("In Movie");
             Statement statement = dbcon.createStatement();
