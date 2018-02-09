@@ -180,22 +180,23 @@ $('#buttonCart').click(function (event){
     	var movieid = $("#buttonCart").val();
     	console.log("printing movie id");
     	console.log(movieid);
-	/*
+	
     	console.log("before in when pressing cart jQuery preventDefault");
     	formSubmitEvent.preventDefault();
     	console.log("before jQuery post");
-    	jQuery.post(
+    	jQuery.get(
     		"/Fabflix/ShoppingCart", 
     		// serialize the cart form to the data sent by POST request
-    		jQuery("#cart_form").serialize(),
+    		{movieId: movieid},
+    		{add: "true"},
     		(resultDataString) => handleCartButton(resultDataString));
-    	*/
+    	
    // 	var  = window.location.href.split('?');
     //	var remainingquery = q[1];
    // 	console.log(remainingquery);
-    	var url_full = queryStringUrlReplacement("/Fabflix/ShoppingCart.html?", "movieid", movieid);
-    	console.log(url_full);
-    	window.location.replace(url_full);
+    //	var url_full = queryStringUrlReplacement("/Fabflix/ShoppingCart.html?", "movieid", movieid);
+    //	console.log(url_full);
+    //	window.location.replace(url_full);
    
 });
 

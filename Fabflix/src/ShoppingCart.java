@@ -33,6 +33,10 @@ public class ShoppingCart extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    public void addToCart(String MovieId, int quantity, User user) {
+    	user.changeQuantity(MovieId, quantity);
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
