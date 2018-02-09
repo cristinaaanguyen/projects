@@ -34,8 +34,13 @@ public class ShoppingCart extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    public void addToCart(String MovieId, int quantity, User user) {
-    	user.changeQuantity(MovieId, quantity);
+    public JsonObject addToCart(String MovieId, String quantity, User user, PrintWriter out) {
+    	int amount = user.changeQuantity(MovieId, Integer.parseInt(quantity));
+    	JsonObject jsonObject = new JsonObject();
+    	jsonObject.addProperty("movieid", MovieId);
+    	jsonObject.addProperty("quantity", amount);
+    	out.write(jsonObject.toString());
+    	return jsonObject;
     }
 
 	/**
@@ -46,15 +51,19 @@ public class ShoppingCart extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		User user = (User) request.getSession().getAttribute("user");
+		String movieId = request.getParameter("movieId");
+		String quantity = request.getParameter("quantity");
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         response.setContentType("application/json");
         
         PrintWriter out = response.getWriter();
-        
-        user.addToCart("tt0254440");
-        user.addToCart("tt0256400");
+        if (request.getParameter("add") != null)
+        	addToCart(movieId,  quantity , user, out);
+        else {
+        //user.addToCart("tt0254440");
+        //user.addToCart("tt0256400");
         
         try {
         	System.out.println("here");
@@ -99,6 +108,7 @@ public class ShoppingCart extends HttpServlet {
                     + "<P>SQL error in doPost: " + ex.getMessage() + "</P></BODY></HTML>");
         		return;
         		}
+        }
         out.close();
 	}
 
