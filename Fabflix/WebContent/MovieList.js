@@ -89,10 +89,8 @@ function handleMovieResult(resultDataArray) {
 			rowHTML += "<th>" + resultDataArray[i]["director"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["year"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
-			//console.log("printing list of stars");
-			//console.log(resultDataArray[i]["stars"]);
 			rowHTML += "<th>" + handleStarsInMovie(resultDataArray[i]["stars"]) + "</th>";
-			//console.log(rowHTML);
+			rowHTML += "<td>" + makeForm(resultDataArray[i]["movieid"]) + "</td>";
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
 		}
@@ -159,6 +157,53 @@ $('.limit').click(function (event){
 });
 
 
+function handleCartButton(resultDataString){
+	console.log("Beginning of handleCart result");
+	console.log(resultDataString);
+	//resultDataJson = JSON.parse(resultDataString);
+	
+	
+		console.log(resultDataString);
+		console.log(resultDataString["movieid"]);
+
+
+			var url = new URL("http://localhost:8080/Fabflix/ShoppingCart.html")
+			url.searchParams.set('movieid', resultDataString['movieid']);
+			url.searchParams.set('quantity', resultDataString["quantity"]);
+			var modifiedUrl = url.toString();
+			console.log(modifiedUrl);
+			window.location.replace(modifiedUrl);
+}
+
+$('#buttonCart').click(function (event){
+	event.preventDefault();
+    	var movieid = $("#buttonCart").val();
+    	console.log("printing movie id");
+    	console.log(movieid);
+	/*
+    	console.log("before in when pressing cart jQuery preventDefault");
+    	formSubmitEvent.preventDefault();
+    	console.log("before jQuery post");
+    	jQuery.post(
+    		"/Fabflix/ShoppingCart", 
+    		// serialize the cart form to the data sent by POST request
+    		jQuery("#cart_form").serialize(),
+    		(resultDataString) => handleCartButton(resultDataString));
+    	*/
+   // 	var  = window.location.href.split('?');
+    //	var remainingquery = q[1];
+   // 	console.log(remainingquery);
+    	var url_full = queryStringUrlReplacement("/Fabflix/ShoppingCart.html?", "movieid", movieid);
+    	console.log(url_full);
+    	window.location.replace(url_full);
+   
+});
+
+//jQuery("#cart_form").submit((event) => FormCartSubmit(event));
+
+
+
+
 function getRadioValue(theRadioGroup)
 {
     var elements = document.getElementsByName(theRadioGroup);
@@ -211,5 +256,26 @@ function makeNewURL(url, new_param, new_val){
 	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], new_param, new_val);
 	console.log(url_full);
 	window.location.replace(url_full);
+}
+
+
+function makeForm(movieid){
+	var form = "";
+	var form = "<form method=\"get\" action=\"/Fabflix/ShoppingCart.html?movieid="+ movieid +"\" class=\"form-inline id = \"cart_form\"" + ">" +
+	  "<div class=\"form-group mx-sm-3 mb-2\">" +
+	   " <label for=\"quantity\" class=\"sr-only cart\"> quantity ... </label>" +
+	    "<input type=\"text\" class=\"form-control\" id=\"quantity name = \"quantity\"\" placeholder=\"quantity ... \">" +
+		  "<button type=\"submit\" class=\"btn btn-primary mb-2\" value = " +movieid+" id = buttonCart>Add to cart</button>"+
+	  "</div>" +
+
+	"</form>";
+	/*
+	form = "<div class=\"form-group mx-sm-3 mb-2\">" +
+	   " <label for=\"quantity\" class=\"sr-only\"> quantity ... </label>" +
+	    "<input type=\"text\" class=\"form-control\" id=\"quantity\" name = "quantity" placeholder=\"quantity ... \">" +
+		  "<button type=\"submit\" class=\"btn btn-primary mb-2\" value = " +movieid+" id = \"buttonCart\">Add to cart</button>"+
+	  "</div>";
+	*/
+	return form;
 }
 
