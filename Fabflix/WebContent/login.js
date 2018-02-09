@@ -18,7 +18,6 @@ function handleLoginResult(resultDataString) {
 	}
 }
 
-
 function submitLoginForm(formSubmitEvent) {
 	console.log("submit login form");
 	

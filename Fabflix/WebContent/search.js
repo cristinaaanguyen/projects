@@ -19,6 +19,8 @@ function handleSearchResult(resultDataString) {
 			url.searchParams.set('director', resultDataString["director"]);
 			url.searchParams.set('starfn', resultDataString["starfn"]);
 			url.searchParams.set('starln', resultDataString["starln"]);
+			url.searchParams.set('page', resultDataString["page"]);
+
 			var modifiedUrl = url.toString();
 			console.log(modifiedUrl);
 			//var title = resultDataString["title"].split(' ').join('%20')
