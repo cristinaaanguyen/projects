@@ -97,13 +97,16 @@ public class MovieList extends HttpServlet {
 		String director = request.getParameter("director");
 		String starfn = request.getParameter("starfn");
 		String starln = request.getParameter("starln");
+		int page = 1;
+		if (!isEmpty(request.getParameter("page")))
+			page = Integer.parseInt(request.getParameter("page"));
+		
+		
+		System.out.println("Print curr page");
+		System.out.println(page);
 		System.out.println("Print url");
 		String url = request.getRequestURL().toString() + request.getQueryString();
 		System.out.println(url);
-//
-//		System.out.println("Print title parameter or artist");
-//		System.out.println(title);
-//		System.out.println(starfn);
 
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
@@ -134,12 +137,13 @@ public class MovieList extends HttpServlet {
         System.out.println("printing total count from results");
         int count = getTotalCount(query);
         System.out.println(count);
-       // if ("title".equals(type) ||"year".equals(type) ) {
-        query = updateQuery(query, ordering, type, limit, 0);
-       // }
+        
+        int totalpages = count/limit;
+        query = updateQuery(query, ordering, type, limit, (page-1)*limit);
+
         System.out.println(query);
         PrintWriter out = response.getWriter();
-        executeSearchQuery(request, query, out, starfn, starln);        // Output stream to STDOUT
+        executeSearchQuery(request, query, out, starfn, starln, totalpages);        // Output stream to STDOUT
 		//doPost(request,response);
         
 
@@ -211,12 +215,12 @@ public class MovieList extends HttpServlet {
 	}
 	
 	
-	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln) {
+	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln, int pages) {
 		System.out.println("Inside execute query");
 		try {
 
-			String loginUser = "ahtrejo";
-	        String loginPasswd = "1996Code";
+			String loginUser = "mytestuser";
+	        String loginPasswd = "mypassword";
 
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
@@ -247,6 +251,7 @@ public class MovieList extends HttpServlet {
 
 	        		JsonObject jsonObj = new JsonObject();
 	        		jsonObj.addProperty("errmsg", "success");
+	        		jsonObj.addProperty("pages", pages);
 	        		jsonArray.add(jsonObj);
 	            while (rs.next()) {
 	        			JsonObject jsonObject = new JsonObject();
@@ -295,7 +300,7 @@ public class MovieList extends HttpServlet {
 	            		jsonObject.addProperty("genres", m_genres);
 	            		
 
-	            		System.out.println(jsonObject.toString());
+	            		//System.out.println(jsonObject.toString());
 	            		jsonArray.add(jsonObject);
 	            		//out.write(jsonObject.toString());
 	            }
@@ -369,9 +374,9 @@ public class MovieList extends HttpServlet {
 	}
 
 	
-	//executecountquery will return the # of rows in the results, -1 if no results are found
+	//executecountquery will return the # of rows in the results, 0 if no results are found
 	int getTotalCount(String query) {
-		int count = -1;
+		int count = 0;
 		try {
 			
 			String loginUser = "mytestuser";

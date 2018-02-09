@@ -2,25 +2,84 @@
 
 function handleStarsInMovie(resultDataArrayStar){
 	var res = "";
-	console.log("trying to link the stars");
+	//console.log("trying to link the stars");
 	for (var i = 0; i < resultDataArrayStar.length; i++){
 		if (i != 0 ){
 			res += ", ";
 		}
-		console.log("printing starid");
-		console.log(resultDataArrayStar[i]["starid"]);
-		res += "<a href = \"\MovieStar.html?Movieid=" + resultDataArrayStar[i]["starid"] + "\">" + resultDataArrayStar[i]["name"] + "</a>"
-		console.log(res);}
+
+		res += "<a href = \"\MovieStar.html?Starid=" + resultDataArrayStar[i]["starid"] + "\">" + resultDataArrayStar[i]["name"] + "</a>"
+		}
 	return res;
 }
 
-function handleStarResult(resultDataArray) {
+$('.pagination').on('click', 'li:not(.prev):not(.next)', function() {
+    $('.pagination li').removeClass('active');
+    $(this).not('.prev,.next').addClass('active');
+    console.log($(this).val());
+    makeNewURL(window.location.href, "page", $(this).val());
+    
+});
+
+$('.pagination').on('click', 'li.prev', function() {
+	event.preventDefault();
+    $('li.active').removeClass('active').prev().addClass('active');
+    //console.log($(this).val());
+    var url = new URL(window.location.href);
+    var urlString = url.toString();
+    console.log(urlString);
+    console.log("printed url string");
+    var currPage = parseInt(url.searchParams.get("page")) -1;
+    console.log("printing currnet page");
+    console.log(currPage);
+    makeNewURL(urlString, "page", currPage);
+
+    
+});
+
+$('.pagination').on('click', 'li.next', function() {
+	event.preventDefault();
+    $('li.active').removeClass('active').next().addClass('active');
+    var url = new URL(window.location.href);
+    var urlString = url.toString();
+    console.log(urlString);
+    console.log("printed url string");
+    var currPage = parseInt(url.searchParams.get("page")) +1;
+    console.log("printing currnet page");
+    console.log(currPage);    makeNewURL(urlString, "page", currPage);
+
+   
+});
+
+function drawPagination(start, end) {
+    $('#pag_nav ul').empty();
+    $('#pag_nav ul').append('<li class=prev><a href=# aria-label=Previous><span aria-hidden=true>&laquo;</span></a></li>');
+   for (var i = start; i <= end; i++) {
+	   if (i == start)
+		   $('#pag_nav ul').append('<li class = \'active\' value ="' + i + '" ><a href=#> '+ i + '</a></li>');
+	   else{
+		   
+		   $('#pag_nav ul').append('<li value ="' + i + '" ><a href=#> '+ i + '</a></li>');
+	   }
+   }
+   $('#pag_nav ul').append('<li class=next><a href="" aria-label=Previous><span aria-hidden=true>&raquo;</span></a></li>');
+}
+
+
+
+function handleMovieResult(resultDataArray) {
 	console.log("handleStarResult: populating star table from resultData");
 	
 	// populate the star table
-	if (resultDataArray[0]['errmsg'] == "success"){
-		var url = new URL(window.location.href);
-		
+	if (resultDataArray[0]['errmsg'] == "success"){	
+		var url = new URL( window.location.href);
+		var currpage = parseInt(url.searchParams.get("page"));
+		var maxPage = parseInt(resultDataArray[0]['pages']);
+		if ((currpage+4) > maxPage){
+			drawPagination(currpage, maxPage+1);
+		}
+		else
+			drawPagination(currpage, currpage+4);
 		var MovieListTableBodyElement = jQuery("#movie_list_table_body");
 		for (var i = 1; i < resultDataArray.length; i++) {
 			var rowHTML = "";
@@ -30,10 +89,10 @@ function handleStarResult(resultDataArray) {
 			rowHTML += "<th>" + resultDataArray[i]["director"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["year"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
-			console.log("printing list of stars");
-			console.log(resultDataArray[i]["stars"]);
+			//console.log("printing list of stars");
+			//console.log(resultDataArray[i]["stars"]);
 			rowHTML += "<th>" + handleStarsInMovie(resultDataArray[i]["stars"]) + "</th>";
-			console.log(rowHTML);
+			//console.log(rowHTML);
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
 		}
@@ -46,57 +105,24 @@ var url = new URL( window.location.href);
 var q = window.location.href.split('?');
 console.log(q[1]);
 var remainingquery = q[1];
-/*
-console.log("printing title from js file")
-console.log(title);
 
-console.log("printing button val from js file");
+//var currpage = parseInt(url.searchParams.get("page"));
+//var end = currpage + 4;
+//var maxPage = 0;
+//drawPagination(currpage, end);
 
-var val = $('button').val();
-console.log(val);
-*/
+
 // makes the HTTP GET request and registers on success callback function handleStarResult
 
 jQuery.ajax({
 	  dataType: "json",
 	  method: "GET",
 	  url: "/Fabflix/MovieList?" + q[1],
-	  success: (resultData) => handleStarResult(resultData)
+	  success: (resultData) => handleMovieResult(resultData)
 });
 
 
 
-
-
-/*
-function submitForm(formSubmitEvent) {
-	console.log("submit form");
-	
-	// important: disable the default action of submitting the form
-	//   which will cause the page to refresh
-	//   see jQuery reference for details: https://api.jquery.com/submit/
-	formSubmitEvent.preventDefault();
-	console.log("printing button value before preventDefault");
-	var val = $(this).val();
-	console.log(val);
-	var url = new URL( window.location.href);
-	console.log(url);
-	var url_full = "/Fabflix/MovieList.html?title="+ title + "&year=" + 
-  	  	url.searchParams.get("year") + "&director=" +  url.searchParams.get("director")+
-  	  	"&starfn="+ url.searchParams.get("starfn") + "&starln="+ url.searchParams.get("starln") + "&button=" + val;
-	window.location.replace(url_full);
-	//jQuery.post(
-	//	url, 
-		// serialize the login form to the data sent by POST request
-	//	jQuery("#ordering_by").serialize(),
-	//	(resultDataString) => handleStarResult(resultDataString));
-
-}
-
-
-jQuery("#ordering_by").submit((event) => submitForm(event));
-
-*/
 
 $('.order').click(function (event){
 			event.preventDefault();
@@ -175,5 +201,15 @@ function queryStringUrlReplacement(url, param, value)
     }
 
     return newString;
+}
+
+function makeNewURL(url, new_param, new_val){
+	var q = url.split('?');
+	var remainingquery = q[1];
+	console.log("printing remaining query in makeNewURL");
+	console.log(remainingquery);
+	var url_full = queryStringUrlReplacement("/Fabflix/MovieList.html?" + q[1], new_param, new_val);
+	console.log(url_full);
+	window.location.replace(url_full);
 }
 
