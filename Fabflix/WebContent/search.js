@@ -13,19 +13,14 @@ function handleSearchResult(resultDataString) {
 	// if search success, redirect to index.html page
 	if (resultDataString["title"] != "failed") {
 			console.log("title is valid");
-			var url = new URL("http://localhost:8080/Fabflix/MovieList.html")
-			url.searchParams.set('title', resultDataString['title']);
-			url.searchParams.set('year', resultDataString["year"]);
-			url.searchParams.set('director', resultDataString["director"]);
-			url.searchParams.set('starfn', resultDataString["starfn"]);
-			url.searchParams.set('starln', resultDataString["starln"]);
-			url.searchParams.set('page', resultDataString["page"]);
-
-			var modifiedUrl = url.toString();
-			console.log(modifiedUrl);
+			var url = "/Fabflix//MovieList.html?title=" +resultDataString['title'];
+			url += "&year=" + resultDataString["year"] + "&director=" +  resultDataString["director"] + "&starfn=" +  
+			resultDataString["starfn"] + "&starln=" + resultDataString["starln"] + "&page=" + resultDataString["page"];
+			//var modifiedUrl = url.toString();
+			console.log(url);
 			//var title = resultDataString["title"].split(' ').join('%20')
 			//window.location.href = modifiedUrl;
-			window.location.replace(modifiedUrl);
+			window.location.replace(url);
 		} 
 	else {	
 		console.log("show error message");

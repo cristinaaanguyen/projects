@@ -1,8 +1,10 @@
 
 
 
-var resultDataArray = seesionStorage.getItem('sales')
-var MovieListTableBodyElement = jQuery("#sales_table_body");
+
+
+function  handleMovieResult(resultDataArray){
+		var MovieListTableBodyElement = jQuery("#sales_table_body");
 		for (var i = 1; i < resultDataArray.length; i++) {
 			var rowHTML = "";
 			rowHTML += "<tr>";
@@ -16,3 +18,12 @@ var MovieListTableBodyElement = jQuery("#sales_table_body");
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
 		}
+		
+}	
+		
+jQuery.ajax({
+			  dataType: "json",
+			  method: "GET",
+			  url: "/Fabflix/Confirmation",
+			  success: (resultData) => handleMovieResult(resultData)
+});

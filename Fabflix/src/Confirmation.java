@@ -21,16 +21,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class CreditCardInfo
+ * Servlet implementation class Confirmation
  */
-@WebServlet("/CreditCardInfo")
-public class CreditCardInfo extends HttpServlet {
+@WebServlet("/Confirmation")
+public class Confirmation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreditCardInfo() {
+    public Confirmation() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,6 +39,8 @@ public class CreditCardInfo extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		// TODO Auto-generated method stub
 		String firstname = request.getParameter("firstname");
 		System.out.println("printing email");
@@ -64,40 +66,62 @@ public class CreditCardInfo extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
             User user = (User) request.getSession().getAttribute("user");
-            String query = "SELECT * from creditcards c where c.firstname = " + "'"+ firstname + "'" + 
-            " AND c.lastname = " + "'" + lastname + "'" + "and c.expiration = '" + expiration + "'";
-            // Perform the query
+           
     		JsonArray jsonArray = new JsonArray();
 
-            ResultSet rs = statement.executeQuery(query);
             
-            if (rs.next()) {
-            		System.out.println("");
-            		//String insertQuery = "INSERT INTO creditcards VALUES('"+ lastname +"', '"+ firstname  +"', '"+ expiration +"')";
-            		
-            		//request.getSession().setAttribute("user", new User(username));
-            		JsonObject jsonObject = new JsonObject();
-	            jsonObject.addProperty("status", "success");
-	            jsonObject.addProperty("message", "success");
-	            System.out.println(jsonObject.toString());
-	            
-	            jsonArray.add(jsonObject);
-    				out.write(jsonArray.toString());
+    			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    			LocalDate localDate = LocalDate.now();
+    			System.out.println(dtf.format(localDate)); //2016/11/16
+    			String date = dtf.format(localDate);
+    			
+    			
+    			for (Entry<String, Integer> entry : user.getCart().entrySet()){
+    				System.out.println("Inside for loop for iterating through cart items");
+    				for (int i = 0; i < entry.getValue(); i++) {
+        				System.out.println("Inside for loop for iterating through quantity per item");
 
-            }
-    			            
-            else {
-            		//login fails
-	            	//request.getSession().setAttribute("user", new User(username));
-	    			JsonObject responseJsonObject = new JsonObject();
-	    			responseJsonObject.addProperty("status", "fail");
-	    			responseJsonObject.addProperty("message", "creditcard info doesn't exist");
-	    			jsonArray.add(responseJsonObject);
-	    			//responseJsonObject.addProperty("message", "incorrect password");
-	    			out.write(jsonArray.toString());
-            }
+    					String insertQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES("+ Integer.parseInt(user.getID()) +", '" + 
+    				entry.getKey()  +"', '"+ date +"')"; 
+    					int j = 0; int k = 0;
+    					
+        				System.out.println("printing insert query");
+        				System.out.println(insertQuery);
+    					Statement ps = dbcon.createStatement();
+    					j = ps.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+    					
+        				System.out.println("after excecuting insert query");
+
+    					ResultSet key = ps.getGeneratedKeys();
+    					int generatedKey =  0;
+    					if (key.next()) {
+    						generatedKey = key.getInt(1);
+        					System.out.println(generatedKey);
+        					//System.out.println(rs.getLong(1));
+
+    					    //generatedKey = rs.getLong(1);
+    					    
+    					    
+    					}
+    					 
+    					System.out.println("Inserted record's ID: " + generatedKey);
+    					
+    					JsonObject Sale = new JsonObject();
+    					
+    					//ResultSet insert = statement.executeQuery(insertQuery);
+    					
+    					Sale.addProperty("SaleID", generatedKey);
+    					Sale.addProperty("CustomerID", user.getID() );
+    					Sale.addProperty("MovieID", entry.getKey());
+    					Sale.addProperty("date", date);
+    					jsonArray.add(Sale);
+    				}
+    			}
+    			out.write(jsonArray.toString());
             
-            rs.close();
+            
+            
+           
             statement.close();
             dbcon.close();
         } catch (SQLException ex) {
@@ -114,8 +138,8 @@ public class CreditCardInfo extends HttpServlet {
         }
         out.close();
 		//doPost(request,response);
+		
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -8,14 +8,14 @@ function handleCardResult(resultDataString) {
 	console.log(resultDataString["status"]);
 
 	// if login success, redirect to index.html page
-	if (resultDataString["status"] == "success") {
+	if (resultDataString[0]["status"] == "success") {
 		
 		sessionStorage.setItem('sales', resultDataString)
 		window.location.replace("/Fabflix/ConfirmationPage.html");
 	} else {
 		console.log("show error message");
-		console.log(resultDataString["message"]);
-		jQuery("#card_error_message").text(resultDataString["message"]);
+		console.log(resultDataString[0]["message"]);
+		jQuery("#card_error_message").text(resultDataString[0]["message"]);
 	}
 }
 

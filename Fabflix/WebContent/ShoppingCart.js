@@ -53,3 +53,11 @@ function addCartFunc() {
 
 	});
 	}
+
+
+
+$(".checkout").click(function(event){
+	event.preventDefault();
+	console.log("checkout was clicked");
+	window.location.replace("/Fabflix/CreditCardInfo.html");
+});
