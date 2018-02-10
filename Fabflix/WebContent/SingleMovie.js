@@ -47,36 +47,15 @@ function handleStarResult(resultDataArray) {
 			console.log("printing list of stars");
 			console.log(resultDataArray["stars"]);
 			rowHTML += "<th>" + handleStarsInMovie(resultDataArray["stars"]) + "</th>";
-			console.log(rowHTML);
+			rowHTML += "<td>" + "<input class=\"input-group-field\" type=\"number\" name=\"quantity"+ resultDataArray["movieid"]+"\" value=\"0\">" + 
+			"</div>" + "<button class=\"btn addCart\" value=\""+ resultDataArray["movieid"] +"\">Add to Cart</button>" + "</td>" ;
+ + "</td>";
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
+			addCartFunc()
 		//}
 	//}
 }
-
-/*function handleStarResult(resultDataArray) {
-	console.log("handleStarResult: populating star table from resultData");
-	
-	// populate the star table
-	//if (resultDataArray[0]['errmsg'] == "success"){
-		//var url = new URL(window.location.href);
-		
-		var MovieListTableBodyElement = jQuery("#movie_table_body");
-		//for (var i = 1; i < resultDataArray.length; i++) {
-			var rowHTML = "";
-			rowHTML += "<tr>";
-			rowHTML += "<th>" + resultDataArray["movieid"] + "</th>";
-			rowHTML += "<th>" + resultDataArray["title"] + "</th>";
-			rowHTML += "<th>" + resultDataArray["director"] + "</th>";
-			rowHTML += "<th>" + resultDataArray["year"] + "</th>";
-			//rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
-			//rowHTML += "<th>" + resultDataArray[i]["stars"] + "</th>";
-			rowHTML += "</tr>";
-			MovieListTableBodyElement.append(rowHTML);
-		//}
-	//}
-}
-*/
 
 var url = new URL( window.location.href);
 //var title = url.searchParams.get("title");
@@ -85,11 +64,27 @@ console.log(q[1]);
 var remainingquery = q[1];
 
 
-
-
 jQuery.ajax({
 	  dataType: "json",
 	  method: "GET",
 	  url: "/Fabflix/SingleEntity?" + q[1],
 	  success: (resultData) => handleStarResult(resultData)
 });
+
+
+function addCartFunc() {
+	$(".addCart").click(function (event) {
+		event.preventDefault();
+		const mid = $(this).val();
+		var currentVal = 0;
+		currentVal = parseInt($('input[name=quantity'+mid+']').val());
+		if (currentVal < 0 ){
+			currentVal = 0;
+		} 
+	$.post('ShoppingCart',{
+		add: "true",
+		movieid: mid,
+		quantity: currentVal
+	})
+	});
+}

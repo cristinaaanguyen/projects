@@ -72,7 +72,7 @@ public class MovieList extends HttpServlet {
     
     public String browseQuery(String genre, String title) {
     	String query;
-    	System.out.println("genre = " + genre);
+    	//System.out.println("genre = " + genre);
 
     	if (genre != null) {
     		query = "select m.id, m.title, m.year, m.director from movies m, genres g, genres_in_movies gm "+
@@ -240,8 +240,8 @@ public class MovieList extends HttpServlet {
 
 	        		jsonObject.addProperty("errmsg", "failed");
 	        		jsonArray.add(jsonObject);
-	        		System.out.println(jsonObject.toString());
-	        		System.out.println("Wrote JSON object to string");
+	        		//System.out.println(jsonObject.toString());
+	        		//System.out.println("Wrote JSON object to string");
 	        	
 	        }
 	        
@@ -295,7 +295,7 @@ public class MovieList extends HttpServlet {
 	            		jsonObject.addProperty("year", movieYear);
 	            		jsonObject.addProperty("director", movieDirector); 
 	            		jsonObject.addProperty("star", movieStar);
-	            		System.out.println(jsonStarArray.toString());
+	            		//System.out.println(jsonStarArray.toString());
 	            		jsonObject.add("stars", jsonStarArray);
 	            		jsonObject.addProperty("genres", m_genres);
 	            		

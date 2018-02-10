@@ -35,6 +35,7 @@ public class ShoppingCart extends HttpServlet {
     }
     
     public JsonObject addToCart(String MovieId, String quantity, User user, PrintWriter out) {
+    	System.out.println("adding movie to cart");
     	int amount = user.changeQuantity(MovieId, Integer.parseInt(quantity));
     	JsonObject jsonObject = new JsonObject();
     	jsonObject.addProperty("movieid", MovieId);
@@ -51,8 +52,19 @@ public class ShoppingCart extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		User user = (User) request.getSession().getAttribute("user");
-		String movieId = request.getParameter("movieId");
+		String movieId = request.getParameter("movieid");
 		String quantity = request.getParameter("quantity");
+		if (movieId == null) {
+			System.out.println("movie is null");
+		}
+		if (quantity == null) {
+			System.out.println("quantity is null");
+		}
+		if (request.getParameter("add") == null) {
+			System.out.println("add is null");
+		}
+		//System.out.println(movieId);
+		//System.out.println(quantity);
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
@@ -60,7 +72,7 @@ public class ShoppingCart extends HttpServlet {
         
         PrintWriter out = response.getWriter();
         if (request.getParameter("add") != null)
-        	addToCart(movieId,  quantity , user, out);
+        		addToCart(movieId,  quantity , user, out);
         else {
         //user.addToCart("tt0254440");
         //user.addToCart("tt0256400");
@@ -73,21 +85,35 @@ public class ShoppingCart extends HttpServlet {
             // Declare our statement
             JsonArray jsonArray = new JsonArray();
             for (Entry<String, Integer> entry : user.getCart().entrySet()){
-             
-            	JsonObject jsonObject = new JsonObject();
+             System.out.println("printing entry");
+             System.out.println(entry);
+
             	Statement statement = dbcon.createStatement();
             	String query = "SELECT title from movies where movies.id = " + "'"+ entry.getKey() + "'";
             
             	ResultSet rs = statement.executeQuery(query);
-            
+            /*
+    	        if (!rs.isBeforeFirst()) {
+	        	 	JsonObject jsonObject2 = new JsonObject();
+	        		System.out.println("No results found");
 
-            	rs.next();
-            
-            	String movieTitle = rs.getString("title");
-            	
-            	jsonObject.addProperty("title", movieTitle);
-            	jsonObject.addProperty("quantity", entry.getValue());
-        		jsonArray.add(jsonObject);
+	        		jsonObject2.addProperty("errmsg", "failed");
+	        		jsonArray.add(jsonObject2);
+	        		//System.out.println(jsonObject.toString());
+	        		//System.out.println("Wrote JSON object to string");
+	        	
+	        }*/
+    	        
+    	    //    else {
+
+	            	rs.next();
+	            	JsonObject jsonObject = new JsonObject();
+	            	String movieTitle = rs.getString("title");
+	            	jsonObject.addProperty("title", movieTitle);
+	            	jsonObject.addProperty("quantity", entry.getValue());
+	            	jsonObject.addProperty("movieid", entry.getKey());
+	        		jsonArray.add(jsonObject);
+  //  	        }
         		rs.close();
         		statement.close();
 

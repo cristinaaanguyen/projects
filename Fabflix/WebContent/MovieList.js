@@ -90,13 +90,16 @@ function handleMovieResult(resultDataArray) {
 			rowHTML += "<th>" + resultDataArray[i]["year"] + "</th>";
 			rowHTML += "<th>" + resultDataArray[i]["genres"] + "</th>";
 			rowHTML += "<th>" + handleStarsInMovie(resultDataArray[i]["stars"]) + "</th>";
-			rowHTML += "<td>" + makeForm(resultDataArray[i]["movieid"]) + "</td>";
+			rowHTML += "<td>" + "<div>" +
+			  "<input class=\"input-group-field\" type=\"number\" name=\"quantity"+ resultDataArray[i]["movieid"]+"\" value=\"0\">" + 
+			"</div>" + "<button class=\"btn addCart\" value=\""+ resultDataArray[i]["movieid"] +"\">Add to Cart</button>" + "</td>" ;
 			rowHTML += "</tr>";
 			MovieListTableBodyElement.append(rowHTML);
 		}
+		
+		addCartFunc()
 	}
 }
-//"<th><a id=link"+ String.fromCharCode(i)+" href = \"\MovieList.html?browse=true&title="+ String.fromCharCode(i) + "\">" + String.fromCharCode(i) + "<\a></th>";
 
 var url = new URL( window.location.href);
 //var title = url.searchParams.get("title");
@@ -104,13 +107,6 @@ var q = window.location.href.split('?');
 console.log(q[1]);
 var remainingquery = q[1];
 
-//var currpage = parseInt(url.searchParams.get("page"));
-//var end = currpage + 4;
-//var maxPage = 0;
-//drawPagination(currpage, end);
-
-
-// makes the HTTP GET request and registers on success callback function handleStarResult
 
 jQuery.ajax({
 	  dataType: "json",
@@ -159,48 +155,45 @@ $('.limit').click(function (event){
 
 function handleCartButton(resultDataString){
 	console.log("Beginning of handleCart result");
-	console.log(resultDataString);
+	var movieid = resultDataString["movieid"];
+	console.log(resultDataString["movieid"]);
 	//resultDataJson = JSON.parse(resultDataString);
+	console.log(resultDataString);
+	console.log(resultDataString["movieid"]);
+	var movielistrows = document.getElementById("movie_table_body");
+	movielistrows.find('tr').each(function(){
+		console.log("looping through each row in table body");
+		var currmovieid = $(this).find('th:first');
+		if (currmovieid == movieid){
+			$(this).find('td:first:form:input').each(function () {
+				$('#quantity').val(quantity);
+				$('#quantity').attr('placeholder', "replaceing quantity");
+				
+			}) 
+		}
+		
+	});
 	
-	
-		console.log(resultDataString);
-		console.log(resultDataString["movieid"]);
 
-
-			var url = new URL("http://localhost:8080/Fabflix/ShoppingCart.html")
-			url.searchParams.set('movieid', resultDataString['movieid']);
-			url.searchParams.set('quantity', resultDataString["quantity"]);
-			var modifiedUrl = url.toString();
-			console.log(modifiedUrl);
-			window.location.replace(modifiedUrl);
 }
 
-$('#buttonCart').click(function (event){
-	event.preventDefault();
-    	var movieid = $("#buttonCart").val();
-    	console.log("printing movie id");
-    	console.log(movieid);
-	
-    	console.log("before in when pressing cart jQuery preventDefault");
-    	formSubmitEvent.preventDefault();
-    	console.log("before jQuery post");
-    	jQuery.get(
-    		"/Fabflix/ShoppingCart", 
-    		// serialize the cart form to the data sent by POST request
-    		{movieId: movieid},
-    		{add: "true"},
-    		(resultDataString) => handleCartButton(resultDataString));
-    	
-   // 	var  = window.location.href.split('?');
-    //	var remainingquery = q[1];
-   // 	console.log(remainingquery);
-    //	var url_full = queryStringUrlReplacement("/Fabflix/ShoppingCart.html?", "movieid", movieid);
-    //	console.log(url_full);
-    //	window.location.replace(url_full);
-   
-});
-
-//jQuery("#cart_form").submit((event) => FormCartSubmit(event));
+function addCartFunc() {
+	$(".addCart").click(function (event) {
+		event.preventDefault();
+		console.log("adding from movielist");
+		const mid = $(this).val();
+		var currentVal = 0;
+		currentVal = parseInt($('input[name=quantity'+mid+']').val());
+		if (currentVal < 0 ){
+			currentVal = 0;
+		} 
+	$.post('ShoppingCart',{
+		add: "true",
+		movieid: mid,
+		quantity: currentVal
+	})
+	});
+}
 
 
 
@@ -262,7 +255,7 @@ function makeNewURL(url, new_param, new_val){
 
 function makeForm(movieid){
 	var form = "";
-	var form = "<form method=\"get\" action=\"/Fabflix/ShoppingCart.html?movieid="+ movieid +"\" class=\"form-inline id = \"cart_form\"" + ">" +
+	var form = "<form action=\"#\" method = \"post\" class=\"form-inline\" id = \"cart_form\"" + ">" +
 	  "<div class=\"form-group mx-sm-3 mb-2\">" +
 	   " <label for=\"quantity\" class=\"sr-only cart\"> quantity ... </label>" +
 	    "<input type=\"text\" class=\"form-control\" id=\"quantity name = \"quantity\"\" placeholder=\"quantity ... \">" +
@@ -279,4 +272,10 @@ function makeForm(movieid){
 	*/
 	return form;
 }
+
+
+
+
+
+
 
