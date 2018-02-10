@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Movie List</title>
+</head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Fabflix</a>
+	    </div>
+		 <ul class="nav navbar-nav">
+		      <li><a href="/Fabflix/search.html">Home</a></li>
+		      <li><a href="#">Page 2</a></li>
+		      <li><a href="#">Page 3</a></li>
+		    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+
+	      <li><a href="/Fabflix/ShoppingCart.html"><span class="glyphicon glyphicon-log-in"></span> Shopping Cart</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<div> <h1> Movie List </h1> </div>
+		<form id = "ordering_by"action="#" method= "post">
+			<button type="submit" class = "order" value="year">Order by Year</button>
+			<button type="submit" class = "order" value="title">Order by Title</button>
+		</form>
+		<form class="form-inline" action="#" method="post">
+
+	    <div class="form-group">
+	        <input name="radios" type="radio" id="radio1" value = "asc" onClick="validateRadio('asc')">
+	        <label for="radio120"> Ascending</label>
+	    </div>
+	
+	    <div class="form-group">
+	        <input name="radios" type="radio" id="radio2" value = "desc" onClick="validateRadio('desc')">
+	        <label for="radio121"> Descending</label>
+	    </div>
+
+	
+	</form>
+        
+		
+
+		<table id=movie_table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Movie ID</th>
+
+				<th>Title</th>
+				<th>Director</th>
+				<th>Year</th>
+				<th>Genres</th>
+				<th>Stars</th>
+				<th>Add Movie to Cart</th>
+			</tr>
+		</thead>
+		<tbody id=movie_list_table_body>
+		</tbody>
+	</table>
+	
+	<form action="#" class ="form-inline">
+	    <input type="hidden" name="currentPage" value="1">
+	    <div class="form-group col-md-4">
+	        <label for="records">Select records per page:</label>
+	        <select class="form-control" id="records" name="recordsPerPage"> 
+	            <option value="5">5</option> 
+	            <option value="10">10</option>
+	            <option value="15">15</option>
+	        </select>
+	        	<button type="submit" class="btn btn-primary limit">Submit</button>
+	    </div>
+
+	</form>
+
+
+<nav id="pag_nav">
+  <ul class="pagination">
+  </ul>
+</nav>
+	
+	<div id = "search_error_message"></div>
+	
+	<!-- include jQuery and Bootstrap JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<!-- include our own JS file -->
+	<script src="./MovieList.js"></script>
+	<script src="./search.js"></script>
+	
+</body>
+</html>
