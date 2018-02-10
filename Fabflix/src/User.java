@@ -11,16 +11,22 @@ import java.util.Map;
 public class User {
 	
 	private final String UserEmail;
+	private final String Id;
 	
 	private Map<String, Integer> Cart;
 	
-	public User(String email) {
+	public User(String email, String id) {
 		this.UserEmail = email;
 		this.Cart = new HashMap<String, Integer>();
+		this.Id = id;
 	}
 	
 	public String getUsername() {
 		return this.UserEmail;
+	}
+	
+	public String getID() {
+		return this.Id;
 	}
 	
 	public Map<String, Integer> getCart(){
