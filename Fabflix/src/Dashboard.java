@@ -1,3 +1,5 @@
+
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -5,26 +7,26 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class EmployeeLogin
  */
-@WebServlet("/loginServlet")
-public class loginServlet extends HttpServlet {
+@WebServlet("/Dashboard")
+public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public loginServlet() {
+    public Dashboard() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,8 +35,10 @@ public class loginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String username = request.getParameter("username");
-		System.out.println("printing email");
+		System.out.println("printing employee email");
 		System.out.println(username);
 		String password = request.getParameter("password");
         PrintWriter out = response.getWriter();
@@ -70,13 +74,13 @@ public class loginServlet extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
             
-            String query = "SELECT * from customers where customers.email = " + "'"+ username+ "'" + " AND customers.password = " + "'"+password+ "'";
+            String query = "SELECT * from employees where employees.email = " + "'"+ username+ "'" + " AND employees.password = " + "'"+password+ "'";
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
             
             if (rs.next()) {
             		System.out.println("");
-            		request.getSession().setAttribute("user", new User(username, rs.getString("id")));
+            		request.getSession().setAttribute("user", new User(username, rs.getString("email")));
             		JsonObject jsonObject = new JsonObject();
 	            jsonObject.addProperty("status", "success");
 	            jsonObject.addProperty("message", "success");
@@ -90,7 +94,7 @@ public class loginServlet extends HttpServlet {
 	            	//request.getSession().setAttribute("user", new User(username));
 	    			JsonObject responseJsonObject = new JsonObject();
 	    			responseJsonObject.addProperty("status", "fail");
-	    			responseJsonObject.addProperty("message", "email " + username + " doesn't exist");
+	    			responseJsonObject.addProperty("message", "employee email " + username + " doesn't exist");
 	    			//responseJsonObject.addProperty("message", "incorrect password");
 	    			out.write(responseJsonObject.toString());
             }

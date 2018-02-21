@@ -1,7 +1,6 @@
 
 
 import java.io.IOException;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet Filter implementation class LoginFilter
+ * Servlet Filter implementation class DashboardFilter
  */
-@WebFilter("/LoginFilter")
-public class LoginFilter implements Filter {
+@WebFilter("/DashboardFilter")
+public class DashboardFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public LoginFilter() {
+    public DashboardFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -39,7 +38,7 @@ public class LoginFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		System.out.println("LoginFilter: " + httpRequest.getRequestURI());
+		System.out.println("DashboardFilter: " + httpRequest.getRequestURI());
 		
 		// check if this URL is allowed to access without logging in
 		if (this.isUrlAllowedWithoutLogin(httpRequest.getRequestURI())) {
@@ -54,7 +53,7 @@ public class LoginFilter implements Filter {
 			System.out.println(httpRequest.getSession().getAttribute("user"));
 
 			
-			httpResponse.sendRedirect("/Fabflix/login.html");
+			httpResponse.sendRedirect("/Fabflix/dashboard.html");
 			return;
 		} else {
 			
@@ -77,8 +76,8 @@ public class LoginFilter implements Filter {
 		}
 		return false;
 	}
-		
-
+	
+	
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */

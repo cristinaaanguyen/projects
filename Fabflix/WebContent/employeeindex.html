@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+	
+	<body>
+    <title>Shopping Cart</title>    
+		<div class="container">
+			<h1>Employee Index</h1><hr>
+			<table class="table table-striped table-hover table-bordered shopping-cart-items">
+				<thead>
+					<tr>
+						<th>Table Name</th>
+						<th>Attributes</th>
+					</tr>
+				</thead>
+		        <tbody id = "listcart">
+		           <tr> <th> movies </th>
+		            <th> <ul>
+						  <li>id:varchar(10) (primary key)</li>
+						  <li>title:varchar(100) </li>
+						  <li>year:integer </li>
+						  <li>director:varchar(100) </li>
+						  
+						</ul>
+		            </th>
+		            </tr>
+		            <tr> <th> stars </th>
+		            <th> <ul>
+						  <li>id:varchar(10) (primary key)</li>
+						  <li>name:varchar(100) </li>
+						  <li>birthYear:integer </li>
+						</ul>
+		            </th>
+		            </tr>
+		            
+		            <tr> <th> stars_in_movies </th>
+		            <th> <ul>
+						  <li>starId:varchar(10), referencing stars.id</li>
+						  <li>movieId:varchar(10), referencing movies.id</li>
+						</ul>
+		            </th>
+		            </tr>
+		            <tr> <th> genres </th>
+		            <th> <ul>
+						  <li>id:integer (primary key)</li>
+						  <li>name:varchar(32) </li>
+						</ul>
+		            </th>
+		            </tr>	  
+		            <tr> <th> genres_in_movies </th>
+		            <th> <ul>
+						  <li>genreId:integer, referencing genres.id</li>
+						  <li>movieId:varchar(10]), referencing movies.id</li>
+						</ul>
+		            </th>
+		            </tr>          
+
+		            <tr> <th> customers </th>
+		            <th> <ul>
+						  <li>id:integer (primary key)</li>
+						  <li>firstName:varchar(50)</li>
+						  <li>lastName:varchar(50)</li>
+						  <li>ccId:varchar(20), referencing creditcards.id</li>
+						  <li>address:varchar(200)</li>
+						  <li>email:varchar(50)</li>
+						  <li>password:varchar(20)</li>	  
+						</ul>
+		            </th>
+		            </tr>   	
+		            
+		            <tr> <th> sales </th>
+		            <th> <ul>
+						  <li>id:integer (primary key)</li>
+						  <li>customerId:integer, referencing customers.id</li>
+						  <li>movieId:varchar(10), referencing movies.id</li>
+						  <li>saleDate:date</li>
+						</ul>
+		            </th>
+		            </tr>   		            
+		            <tr> <th> creditcards </th>
+		            <th> <ul>
+						  <li>id:varchar(20), (primary key)</li>
+						  <li>firstName:varchar(50)</li>
+						  <li>lastName:varchar(50)</li>
+						  <li>expiration:date</li>
+						</ul>
+		            </th>
+		            </tr>   	
+ 		            <tr> <th> ratings </th>
+		            <th> <ul>
+						  <li>movieId:varchar(10), referencing movies.id</li>
+						  <li>rating:float</li>
+						  <li>numVotes:integer </li>
+						</ul>
+		            </th>
+		            </tr>  
+		        </tbody>
+		    </table>          
+		    
+		</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<!-- include our own JS file -->
+	<script src="./employeeindex.js"></script>
+  </body>
+</html>

@@ -10,11 +10,13 @@ function handleLoginResult(resultDataString) {
 
 	// if login success, redirect to index.html page
 	if (resultDataString["status"] == "success") {
-		window.location.replace("/Fabflix/index.html");
+		window.location.replace("/Fabflix/employeeindex.html");
 	} else {
 		console.log("show error message");
 		console.log(resultDataString["message"]);
+		window.location.reload();
 		jQuery("#login_error_message").text(resultDataString["message"]);
+
 	}
 }
 
@@ -28,7 +30,7 @@ function submitLoginForm(formSubmitEvent) {
 	formSubmitEvent.preventDefault();
 		
 	jQuery.post(
-		"/Fabflix/loginServlet", 
+		"/Fabflix/Dashboard", 
 		// serialize the login form to the data sent by POST request
 		jQuery("#login_form").serialize(),
 		(resultDataString) => handleLoginResult(resultDataString));
