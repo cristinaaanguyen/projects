@@ -53,7 +53,7 @@ public class Parser {
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             //parse using builder to get DOM representation of the XML file
-            dom = db.parse("../Fabflix/project3data/mains243.xml");
+            dom = db.parse("../project3data/mains243.xml");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
