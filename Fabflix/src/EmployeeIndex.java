@@ -75,6 +75,7 @@ public class EmployeeIndex extends HttpServlet {
             //System.out.println("here");
 	           JsonObject jsonObject = new JsonObject();
 
+
             if (starname != null && !starname.equals("")) {
 		            Statement statement = dbcon.createStatement();
 		            if (birthyear == null || birthyear.equals("")) {
@@ -155,7 +156,8 @@ public class EmployeeIndex extends HttpServlet {
     		} //end second if 
     		else {
     			System.out.println("all fields are exist");
-   			
+ 	        JsonObject jsonObject2 = new JsonObject();
+
     			CallableStatement cs = dbcon.prepareCall("{call add_movie(?, ?, ?, ?,?,?)}");
     			System.out.println("preparing callable statement");
     			cs.setString(1, title);
@@ -169,11 +171,13 @@ public class EmployeeIndex extends HttpServlet {
     			System.out.println("after executing cs");
     			dbcon.commit();
     		    String message = cs.getString(6);
+    		    jsonObject2.addProperty("status", "success");    		    
     		    System.out.println("message from stored procedure: " + message);
-    		    jsonObject.addProperty("spmsg", message);
+    		    jsonObject2.addProperty("spmsg", message);
+    			out.write(jsonObject2.toString());
+
    			
     		} //end second else
-			out.write(jsonObject.toString());
 
         } catch (SQLException ex) {
             while (ex != null) {
