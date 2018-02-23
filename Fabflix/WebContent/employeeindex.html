@@ -12,7 +12,7 @@
     
 	
 	<body>
-    <title>Shopping Cart</title>    
+    <title>Employee Index</title>    
 		<div class="container">
 			<h1>Employee Index</h1><hr>
 			<table class="table table-striped table-hover table-bordered shopping-cart-items">
@@ -103,10 +103,73 @@
 						</ul>
 		            </th>
 		            </tr>  
+ 		            <tr> <th> employees </th>
+		            <th> <ul>
+						  <li>email varchar(50) primary key</li>
+						  <li>password varchar(20) not null</li>
+						  <li>fullname varchar(100)</li>
+						</ul>
+		            </th>
+		            </tr>  		            
 		        </tbody>
 		    </table>          
-		    
 		</div>
+		
+
+	<div class="col-md-4 col-md-offset-4"> <h1> ADD STAR </h1></div>
+		
+	<div>
+	 <form id="star_form" method="post" action="#" class="col-md-4 col-md-offset-4">
+  		<div class="form-group ">
+    			<label for="starname">Star Name </label>
+    			<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter Star Name ..." name = "starname">
+  		</div>
+  		<div class="form-group">
+    			<label for="birthyear">Birth Year</label>
+    			<input type="text" class="form-control" id="formGroupExampleInput3" placeholder="Enter Birth Year ..." name = "birthyear">
+  		</div>
+  		<div>
+  			<input type="submit" value="Submit form" />
+  		</div>
+  		
+  			<div id = "star_message"> </div>
+  		
+	</form>
+	</div>
+	
+	
+	
+	
+	<div class="col-md-4 col-md-offset-4"> <h1> ADD MOVIE </h1></div>
+		
+	<div>
+	 <form id="movie_form" method="post" action="#" class="col-md-4 col-md-offset-4">
+  		<div class="form-group ">
+    			<label for="title">Title </label>
+    			<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter Title ..." name = "title">
+  		</div>
+  		<div class="form-group">
+    			<label for="year">Year</label>
+    			<input type="text" class="form-control" id="formGroupExampleInput3" placeholder="Enter Year ..." name = "year">
+  		</div>
+  		<div class="form-group">
+    			<label for="director">Director</label>
+    			<input type="text" class="form-control" id="formGroupExampleInput3" placeholder="Enter Director ..." name = "director">
+  		</div>
+  		<div class="form-group">
+    			<label for="mstar">Star Name</label>
+    			<input type="text" class="form-control" id="formGroupExampleInput3" placeholder="Enter Star Name..." name = "mstar">
+  		</div>
+  		<div class="form-group">
+    			<label for="genre">Star Name</label>
+    			<input type="text" class="form-control" id="formGroupExampleInput3" placeholder="Enter Genre..." name = "genre">
+  		</div>
+  		<div>
+  			<input type="submit" value="Submit form" />
+  		</div>
+  		<div id = "movie_message"></div>
+	</form>
+	</div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -115,6 +178,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   	<!-- include our own JS file -->
-	<script src="./employeeindex.js"></script>
+	<script src="./EmployeeIndex.js"></script>
   </body>
 </html>
