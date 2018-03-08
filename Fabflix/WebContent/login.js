@@ -8,9 +8,9 @@ function handleLoginResult(resultDataString) {
 	console.log(resultDataString);
 	console.log(resultDataString["status"]);
 
-	// if login success, redirect to index.html page
+	// if login success, redirect to home.html page
 	if (resultDataString["status"] == "success") {
-		window.location.replace("/Fabflix/index.html");
+		window.location.replace("/Fabflix/home.html");
 	} else {
 		console.log("show error message");
 		console.log(resultDataString["message"]);

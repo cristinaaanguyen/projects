@@ -57,3 +57,7 @@ width:100%;
 	margin-left: auto;
     margin-right: auto;
 }
+
+.ui-widget-content {
+    background-color:white;
+}

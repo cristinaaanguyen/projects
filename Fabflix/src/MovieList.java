@@ -139,6 +139,7 @@ public class MovieList extends HttpServlet {
         System.out.println(count);
         
         int totalpages = count/limit;
+        if (count % limit != 0) totalpages += 1;
         query = updateQuery(query, ordering, type, limit, (page-1)*limit);
 
         System.out.println(query);
@@ -185,10 +186,11 @@ public class MovieList extends HttpServlet {
         if (!isEmpty(title)) {  	
         		request.getSession().setAttribute("title", title);
         		if (subquery.contains("and") || !isEmpty(subquery)) {
-        			subquery += " and m.title like " + "'%"+ title + "%'";
+        			//subquery += " and m.title like " + "'%"+ title + "%'";
+        			subquery += " and MATCH(m.title) AGAINST " + fullTextTitle(title);
         		}
         		else {
-        			subquery += "m.title like " + "'%"+ title + "%'";
+        			subquery += "MATCH(m.title) AGAINST " + fullTextTitle(title);
         		}
         }
         if (!isEmpty(director)) {
@@ -366,6 +368,14 @@ public class MovieList extends HttpServlet {
 			query += " offset  " + offset;
 		}
 		return query;
+	}
+	
+	String fullTextTitle(String s) {
+		String newtitle = "(" + "\"";
+		for (int i = 0; i < s.split(" ").length; i++) {
+			newtitle +=  "" +"+" + s.split(" ")[i] + "* ";
+		}
+		return newtitle + " \" in boolean mode)";
 	}
 	//removes the string before the a certain word, so we can replace with count
 	String makeCountQuery(String query, String word) {

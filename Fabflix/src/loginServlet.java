@@ -39,9 +39,10 @@ public class loginServlet extends HttpServlet {
 		String password = request.getParameter("password");
         PrintWriter out = response.getWriter();
 
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+        //String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        //System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
         // Verify CAPTCHA.
+        /*
         boolean valid = VerifyUtils.verify(gRecaptchaResponse);
         if (!valid) {
             //errorString = "Captcha invalid!";
@@ -51,7 +52,7 @@ public class loginServlet extends HttpServlet {
                         "</TITLE></HEAD>\n<BODY>" +
                         "<P>Recaptcha WRONG!!!! </P></BODY></HTML>");
             return;
-        }
+        } */
 
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
