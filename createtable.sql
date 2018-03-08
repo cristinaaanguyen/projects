@@ -7,16 +7,18 @@ CREATE TABLE movies (
 	title varchar(100) NOT NULL,
 	year integer NOT NULL,
 	director varchar(100) NOT NULL,
-	PRIMARY KEY(id)
+	PRIMARY KEY(id),
+	FULLTEXT m (title));
 
-);
 
 CREATE TABLE stars(
 	id varchar(10) NOT NULL,
 	name varchar(100) NOT NULL,
 	birthYear integer,
-	PRIMARY KEY(id) 
-);
+	PRIMARY KEY(id),
+	FULLTEXT sn (name));
+
+
 
 CREATE TABLE stars_in_movies(
 	starId varchar(10) NOT NULL, 
