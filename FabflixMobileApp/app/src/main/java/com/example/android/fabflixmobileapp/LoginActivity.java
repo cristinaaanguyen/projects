@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         final Context context = this;
-        String aws = "http://18.221.131.86:8080";
+        String aws = "http://13.58.187.246:8080";
         String local = "http://10.0.2.2:8080";
         String url = aws + "/Fabflix/loginServlet?username=";
         url += ((EditText)findViewById(R.id.email)).getText().toString();
