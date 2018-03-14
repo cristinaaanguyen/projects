@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +28,9 @@ import com.google.gson.JsonArray;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import javax.naming.InitialContext;
+import javax.naming.Context;
+import javax.sql.DataSource;
 
 /**
  * Servlet implementation class MovieList
@@ -110,7 +115,7 @@ public class MovieList extends HttpServlet {
 
 		String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true&autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true";
         response.setContentType("application/json"); // Response mime type
 
         String query = "";
@@ -221,18 +226,43 @@ public class MovieList extends HttpServlet {
 		System.out.println("Inside execute query");
 		try {
 
-			String loginUser = "mytestuser";
+			/*String loginUser = "mytestuser";
 	        String loginPasswd = "mypassword";
 
 
 	        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true";
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
-	        Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+	        Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);*/
+			
+	           Context initCtx = new InitialContext();
+	            if (initCtx == null)
+	                out.println("initCtx is NULL");
+
+	            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	            if (envCtx == null)
+	                out.println("envCtx is NULL");
+
+	            // Look up our data source
+	            DataSource ds = (DataSource) envCtx.lookup("jdbc/MovieDB");
+
+	            // the following commented lines are direct connections without pooling
+	            //Class.forName("org.gjt.mm.mysql.Driver");
+	            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+	            //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+	            if (ds == null)
+	                out.println("ds is null.");
+
+	            Connection dbcon = ds.getConnection();
+	            if (dbcon == null)
+	                out.println("dbcon is null.");
 	        
-			Statement statement = dbcon.createStatement();
-	        Statement statementStars = dbcon.createStatement();
-	        Statement statementGenre = dbcon.createStatement();
-	        ResultSet rs = statement.executeQuery(query);
+			//Statement statement = dbcon.createStatement();
+	        //Statement statementStars = dbcon.createStatement();
+	        //Statement statementGenre = dbcon.createStatement();
+	        //ResultSet rs = statement.executeQuery(query);
+	        PreparedStatement movieps = dbcon.prepareStatement(query);
+	        ResultSet rs = movieps.executeQuery();
 	        System.out.println("after executing query");
 	        JsonArray jsonArray = new JsonArray();
 	        
@@ -269,7 +299,8 @@ public class MovieList extends HttpServlet {
             			String movieStar = ""; 
             			if (!isEmpty(starfn) || !isEmpty(starln))
             				movieStar = rs.getString("name");
-	                ResultSet genresResults = statementGenre.executeQuery(queryGenre);
+            	        PreparedStatement genreps = dbcon.prepareStatement(queryGenre);
+	                ResultSet genresResults = genreps.executeQuery();
 	                    
 	                while (genresResults.next()) {
 	                    		String m_gmid = genresResults.getString("name");
@@ -282,7 +313,10 @@ public class MovieList extends HttpServlet {
 	            		String queryStars = "select s.name, s.id from movies m, stars_in_movies ms, stars s where "
 	            				+ "m.id = " + "'"+ movieID + "'" + " and ms.movieID = m.id and ms.starId = s.id";
 	            				;
-	            		ResultSet results = statementStars.executeQuery(queryStars);
+	            				
+	            		//ResultSet results = statementStars.executeQuery(queryStars);
+	                	 PreparedStatement starsps = dbcon.prepareStatement(queryStars);
+	        	         ResultSet results = starsps.executeQuery();
 
 	            		JsonArray jsonStarArray = new JsonArray();
 	            		while(results.next()) {
@@ -312,7 +346,7 @@ public class MovieList extends HttpServlet {
 	        //request.getSession().setAttribute("jsonArray", jsonArray);
 
 	        rs.close();
-	        statement.close();
+	        //statement.close();
 	        dbcon.close(); 
 		} catch (SQLException ex) {
             while (ex != null) {
