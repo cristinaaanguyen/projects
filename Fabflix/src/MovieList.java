@@ -1,5 +1,7 @@
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -42,6 +44,8 @@ public class MovieList extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
+	private long elapsedTimeTS = 0;
+	private long elapsedTimeTJ = 0;
     public MovieList() {
         super();
         // TODO Auto-generated constructor stub
@@ -94,7 +98,9 @@ public class MovieList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
+		PrintWriter pw = new PrintWriter(new FileWriter("/home/ubuntu/project5logSingleInstance1.txt", true));
+		//time start TS
+		long startTimeTS = System.nanoTime();
 		String browse = request.getParameter("browse");
 		String genre = request.getParameter("genre");
 		String title = request.getParameter("title");
@@ -113,9 +119,9 @@ public class MovieList extends HttpServlet {
 		String url = request.getRequestURL().toString() + request.getQueryString();
 		System.out.println(url);
 
-		String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true&autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true";
+		//String loginUser = "mytestuser";
+		//String loginPasswd = "mypassword";
+        //String loginUrl = "jdbc:mysql://localhost:3306/moviedb?allowMultiQueries=true&autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true";
         response.setContentType("application/json"); // Response mime type
 
         String query = "";
@@ -151,6 +157,14 @@ public class MovieList extends HttpServlet {
         PrintWriter out = response.getWriter();
         executeSearchQuery(request, query, out, starfn, starln, totalpages);        // Output stream to STDOUT
 		//doPost(request,response);
+        
+        
+      //time end TS
+        long endTimeTS = System.nanoTime();
+        elapsedTimeTS = endTimeTS - startTimeTS;
+        pw.write(elapsedTimeTS + " " + elapsedTimeTJ + "\n") ;
+        pw.close();
+        System.out.println(elapsedTimeTS + " " + elapsedTimeTJ);
         
 
 	}
@@ -223,6 +237,7 @@ public class MovieList extends HttpServlet {
 	
 	
 	void executeSearchQuery(HttpServletRequest request, String query, PrintWriter out, String starfn, String starln, int pages) {
+		
 		System.out.println("Inside execute query");
 		try {
 
@@ -262,7 +277,13 @@ public class MovieList extends HttpServlet {
 	        //Statement statementGenre = dbcon.createStatement();
 	        //ResultSet rs = statement.executeQuery(query);
 	        PreparedStatement movieps = dbcon.prepareStatement(query);
+	        
+	        //time start for TJ
+	       long startTimeTJ0 = System.nanoTime();
 	        ResultSet rs = movieps.executeQuery();
+	        //time end for TJ
+	        long endTimeTJ0 = System.nanoTime();
+	        elapsedTimeTJ += (endTimeTJ0 - startTimeTJ0); 
 	        System.out.println("after executing query");
 	        JsonArray jsonArray = new JsonArray();
 	        
@@ -300,7 +321,13 @@ public class MovieList extends HttpServlet {
             			if (!isEmpty(starfn) || !isEmpty(starln))
             				movieStar = rs.getString("name");
             	        PreparedStatement genreps = dbcon.prepareStatement(queryGenre);
+            	        //time start TJ
+            	        long startTimeTJ1 = System.nanoTime();
 	                ResultSet genresResults = genreps.executeQuery();
+	                //time end TJ
+	                long endTimeTJ1 = System.nanoTime();
+	                elapsedTimeTJ += (endTimeTJ1 - startTimeTJ1);
+
 	                    
 	                while (genresResults.next()) {
 	                    		String m_gmid = genresResults.getString("name");
@@ -316,7 +343,16 @@ public class MovieList extends HttpServlet {
 	            				
 	            		//ResultSet results = statementStars.executeQuery(queryStars);
 	                	 PreparedStatement starsps = dbcon.prepareStatement(queryStars);
+	                	 //time start TJ
+	            	     long startTimeTJ2 = System.nanoTime();
+
 	        	         ResultSet results = starsps.executeQuery();
+	        	         //time end TJ
+	 	             long endTimeTJ2 = System.nanoTime();
+		             elapsedTimeTJ += (endTimeTJ2 - startTimeTJ2);
+
+	 	             
+
 
 	            		JsonArray jsonStarArray = new JsonArray();
 	            		while(results.next()) {
@@ -460,4 +496,29 @@ public class MovieList extends HttpServlet {
 	}
 }
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
