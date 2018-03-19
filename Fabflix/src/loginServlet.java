@@ -5,11 +5,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -54,10 +58,10 @@ public class loginServlet extends HttpServlet {
             return;
         } */
 
-		String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
+	//	String loginUser = "mytestuser";
+     //   String loginPasswd = "mypassword";
 
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
+     //   String loginUrl = "jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
         response.setContentType("application/json"); // Response mime type
         
         // Output stream to STDOUT
@@ -65,9 +69,31 @@ public class loginServlet extends HttpServlet {
         //System.out.println("Before try loop");
         try {
         	System.out.println("here");
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+       //     Class.forName("com.mysql.jdbc.Driver").newInstance();
+        //    Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
             //System.out.println("here");
+	           Context initCtx = new InitialContext();
+	            if (initCtx == null)
+	                out.println("initCtx is NULL");
+
+	            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	            if (envCtx == null)
+	                out.println("envCtx is NULL");
+
+	            // Look up our data source
+	            DataSource ds = (DataSource) envCtx.lookup("jdbc/MovieDB");
+
+	            // the following commented lines are direct connections without pooling
+	            //Class.forName("org.gjt.mm.mysql.Driver");
+	            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+	            //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+	            if (ds == null)
+	                out.println("ds is null.");
+
+	            Connection dbcon = ds.getConnection();
+	            if (dbcon == null)
+	                out.println("dbcon is null.");
             // Declare our statement
             Statement statement = dbcon.createStatement();
             

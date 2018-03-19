@@ -100,6 +100,7 @@ public class MovieList extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter pw = new PrintWriter(new FileWriter("/home/ubuntu/project5logSingleInstance1.txt", true));
 		//time start TS
+		elapsedTimeTJ = 0;
 		long startTimeTS = System.nanoTime();
 		String browse = request.getParameter("browse");
 		String genre = request.getParameter("genre");
@@ -283,7 +284,7 @@ public class MovieList extends HttpServlet {
 	        ResultSet rs = movieps.executeQuery();
 	        //time end for TJ
 	        long endTimeTJ0 = System.nanoTime();
-	        elapsedTimeTJ += (endTimeTJ0 - startTimeTJ0); 
+	        elapsedTimeTJ = (endTimeTJ0 - startTimeTJ0); 
 	        System.out.println("after executing query");
 	        JsonArray jsonArray = new JsonArray();
 	        
