@@ -1,0 +1,114 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    background-color: linen;
+}
+
+td {
+    border-top-style: solid;
+}
+</style>
+</head>
+<body>
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Single-instance version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="Graph1Instance1Thread.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>19</td>
+    <td>2.5768 ms</td>
+    <td>0.593</td>
+    <td>One thread means we are only testing with one user. This one user sends a bunch of request which is handlled by instance 1 only. It seems fast since we are only testing with one user, connection pooling and prepared statements</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="Graph1Instance10Threads.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>29</td>
+    <td>10.817</td>
+    <td>4.188</td>
+    <td>This test is similar to the test where we only used one thread, except all the scores are longer since we are testing with 10 users instead of 1. Thus, it requires more time to test with 10 users. </td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTPS/10 threads</td>
+    <td><img src="Graph1Instance10ThreadHTTPS.png" alt="Graph Results Screenshot Case 3" style="width:304px;height:228px;"></td>
+    <td>33</td>
+    <td>14.985</td>
+    <td>6.009</td>
+    <td>This test takes longer to run than its counterpart (HTTP/10 threads) because we are using HTTPS protocol. This means there is extra overheaad caused by encryption needed in HTTPS versus normal HTTP.</td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No prepared statements</td>
+    <td><img src="Graph1Instance10ThreadsNoPS.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>33</td>
+    <td>14.276</td>
+    <td>5.137</td>
+    <td>This test runs slower than the test with 10 threads with prepared statements and connection pooling because by using normal create statements, we have to make and recompile a new statement per request meanwhile prepared statements precompiles each statement and is mapped to the connection it was made with.</td>
+  </tr>
+  <tr>
+    <td>Case 5: HTTP/10 threads/No connection pooling</td>
+    <td><img src="Graph1Instance10ThreadsNoCP.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>46</td>
+    <td>25.737</td>
+    <td>16.802</td>
+    <td>This test is significantly much slower without connection pooling because a new connection is being reinstantiated each and every time per request for each user.</td>
+  </tr>
+
+</table> 
+
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Scaled version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="GraphScaledInstances1Thread.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>19</td>
+    <td>3.510</td>
+    <td>.899</td>
+    <td>This test does not vary from its counterpart (single instance HTTP/1 thread) because we only used one thread and sticky session maps all requests to the server it initually used (in this test, the master). Average TJ and TS are a little higher because of the overhead caused by the load balancer</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="GraphScaledInstances10Threads.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>34</td>
+    <td>13.782</td>
+    <td>5.986</td>
+    <td>All requests were sent only to the slave which is why the results don't appear to be any more effective. But, if the requests were distributed across both the master and slave, we would see lower scores in the QT, TS and TJ. </td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTP/10 threads/No prepared statements</td>
+    <td><img src="GraphScaledInstances10ThreadsNoPS.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>34</td>
+    <td>13.011</td>
+    <td>4.284</td>
+    <td>The results from this test and HTTP/10 with prepared statements only vary slightly because all requests are sent to one server as well. If the workload was split between both backend instances, then this test should have run a little slower than its counterpart because it does not used prepared statements. Using normal statements means the statements are compiled each and every time per request. </td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No connection pooling</td>
+    <td><img src="GraphScaledInstances10ThreadsNoCP.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>34</td>
+    <td>15.2215</td>
+    <td>9.9725</td>
+    <td>Compared to its counterpart (HTTP/10/ No connection pooling), it is more efficient and faster because load balancing factor was used and the workload was distrubuted across the two backend MySQL servers. This isn't as fast as it would be with connection pooling because a new connection is recreated per request</td>
+  </tr>
+
+</table> 
+
+</body>
+</html>
